@@ -1,0 +1,8 @@
+node_modules
+dist
+loader
+www/*
+components.d.ts
+.stencil
+.cache
+.DS_Store
