@@ -1,6 +1,6 @@
 {
   "name": "animate-presence",
-  "version": "0.0.2",
+  "version": "0.0.1",
   "description": "Web Component to manage mount/unmount of child nodes",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
