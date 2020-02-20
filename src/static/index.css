@@ -1,0 +1,81 @@
+* {
+  box-sizing: border-box;
+}
+
+html,
+body {
+  margin: 0;
+  padding: 0;
+}
+
+main {
+  padding: 64px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+    Ubuntu, Cantarell, "Open Sans", "Helvetica Neue", sans-serif;
+}
+
+button {
+  display: flex;
+  flex: 1;
+  font: inherit;
+  font-size: 1em;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: none;
+  border: none;
+  border-radius: 3px;
+  color: white;
+}
+
+div.buttons {
+  display: grid;
+  border: none;
+  padding: 0;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  box-shadow: none;
+  gap: 16px;
+  z-index: 0;
+  margin-bottom: 32px;
+}
+
+button:focus {
+  outline: 0;
+}
+
+button:first-of-type {
+  background: #4caf50;
+}
+button:first-of-type:active {
+  background: #43a047;
+}
+button:nth-of-type(2) {
+  background: #f44336;
+}
+button:nth-of-type(2):active {
+  background: #e53935;
+}
+button:last-of-type {
+  background: blue;
+}
+
+.row {
+  display: flex;
+}
+.row .item + .item {
+  margin-left: 16px;
+}
+.item {
+  flex: 1;
+  color: #263238;
+  display: flex;
+  padding: 16px;
+  border: 1px solid #eee;
+  background: white;
+  margin-top: 16px;
+  border-radius: 4px;
+  box-shadow: 0 0.7px 0.4px rgba(0, 0, 0, 0.006),
+    0 1.7px 1px rgba(0, 0, 0, 0.008), 0 3.1px 1.9px rgba(0, 0, 0, 0.01),
+    0 5.6px 3.4px rgba(0, 0, 0, 0.012), 0 10.4px 6.3px rgba(0, 0, 0, 0.014),
+    0 25px 15px rgba(0, 0, 0, 0.02);
+}
