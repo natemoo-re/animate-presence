@@ -1,11 +1,6 @@
 import { Component, h, Element, Host, Prop, Watch, Method } from "@stencil/core";
 import { setCustomProperties, isHTMLElement, hasData, presence } from "../../utils";
 
-// const exit = (el: HTMLElement, i?: number) => {
-//   el.dataset.willExit = "";
-//   setCustomProperties(el, { i });
-// };
-
 const willExit = (el: HTMLElement, i?: number) => {
   el.dataset.willExit = '';
   setCustomProperties(el, { i });
@@ -47,7 +42,7 @@ export class AnimatePresence {
     this.addMO();
   }
 
-  componentDidUnload() {
+  disconnectedCallback() {
     this.mo.disconnect();
     this.mo = undefined;
   }
@@ -100,32 +95,9 @@ export class AnimatePresence {
     }
   }
 
-  // async handleKeyChange(node: Node, record: MutationRecord) {
-  //   if (!isHTMLElement(node)) return;
-  //   const sibling = node.previousSibling;
-  //   const parent = node.parentElement;
-
-  //   await this.exitNode(node);
-  //   delete node.dataset.exit;
-  //   if (isHTMLElement(sibling)) {
-  //     sibling.insertAdjacentElement("afterend", node);
-  //   } else {
-  //     parent.prepend(node);
-  //   }
-  //   await this.enterNode(node);
-  //   console.log("keychange", node, record);
-  // }
-
   handleMutation(records: MutationRecord[]) {
     let i = 0;
     for (const record of records.reverse()) {
-      // if (record.type === "attributes") {
-      //   if (record.attributeName === "data-will-exit") {
-      //     this.exitNode(record.target as HTMLElement);
-      //   } else {
-      //     this.handleKeyChange(record.target, record);
-      //   }
-      // }
       if (record.addedNodes.length === 1) {
         this.handleEnter(record.addedNodes[0], record, records.length - i);
       }
