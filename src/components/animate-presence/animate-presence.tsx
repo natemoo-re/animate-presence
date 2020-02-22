@@ -16,7 +16,6 @@ export class AnimatePresence {
   @Element() element: HTMLElement;
 
   @Prop() observe: boolean = true;
-  @Prop() shallow: boolean = true;
 
   // @Prop({ context: "queue" }) queue!: QueueApi;
 
@@ -27,7 +26,6 @@ export class AnimatePresence {
     if (this.observe) {
       this.mo.observe(this.element, {
         childList: true,
-        subtree: this.shallow,
         attributes: true,
         attributeFilter: ["data-key"]
       });
