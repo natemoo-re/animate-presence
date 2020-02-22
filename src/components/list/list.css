@@ -25,6 +25,20 @@
     cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
+.dot {
+  --size: 1em;
+  width: var(--size);
+  height: var(--size);
+  border-radius: calc(var(--size) / 2);
+  background: red;
+  margin: 0 4px;
+}
+
+.dot[data-enter] {
+  animation: enter 200ms calc(var(--i, 0) * 70ms)
+    cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
 /* 
        * Sets up the position (FLIP) transition
        * --distance is automatically set to the relative
