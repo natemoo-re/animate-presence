@@ -1,9 +1,11 @@
 import { Component, h, Element, Host, Prop, Watch, Method } from "@stencil/core";
+// import { QueueApi } from "@stencil/core/dist/declarations";
 import { setCustomProperties, isHTMLElement, hasData, presence } from "../../utils";
+
 
 const willExit = (el: HTMLElement, i?: number) => {
   el.dataset.willExit = '';
-  setCustomProperties(el, { i });
+  i !== 0 && setCustomProperties(el, { i });
 }
 
 @Component({
@@ -16,6 +18,8 @@ export class AnimatePresence {
   @Prop() observe: boolean = true;
   @Prop() shallow: boolean = true;
 
+  // @Prop({ context: "queue" }) queue!: QueueApi;
+
   @Watch("observe")
   observeChanged() {
     if (!this.mo) return;
@@ -25,10 +29,10 @@ export class AnimatePresence {
         childList: true,
         subtree: this.shallow,
         attributes: true,
-        attributeFilter: ["data-key", "data-will-exit"]
+        attributeFilter: ["data-key"]
       });
     } else {
-      this.mo.disconnect();
+      this.removeMO();
     }
   }
 
@@ -43,20 +47,19 @@ export class AnimatePresence {
   }
 
   disconnectedCallback() {
-    this.mo.disconnect();
-    this.mo = undefined;
+    this.removeMO();
   }
 
   async enterNode(el: HTMLElement, i?: number) {
     el.dataset.initial = "";
     el.dataset.enter = "";
-    setCustomProperties(el, { i });
+    i !== 0 && setCustomProperties(el, { i });
 
     await presence(el, {
       afterSelf: () => {
         delete el.dataset.initial;
         delete el.dataset.enter;
-        el.style.removeProperty('--i');
+        i !== 0 && el.style.removeProperty("--i");
       }
     });
   }
@@ -114,6 +117,13 @@ export class AnimatePresence {
         this.mo = new MutationObserver(this.handleMutation);
         this.observeChanged();
       }
+    }
+  }
+
+  private removeMO() {
+    if (this.mo) {
+      this.mo.disconnect();
+      this.mo = undefined;
     }
   }
 
