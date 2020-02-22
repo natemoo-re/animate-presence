@@ -1,22 +1,15 @@
 import { Component, h, Element, Host, Prop, Watch, Method } from "@stencil/core";
+import { setCustomProperties, isHTMLElement, hasData, presence } from "../../utils";
 
-const isHTMLElement = (node: Node): node is HTMLElement =>
-  node &&
-  node.nodeType === node.ELEMENT_NODE &&
-  typeof (node as HTMLElement).tagName !== "undefined";
-const is = (el: HTMLElement, key: string) =>
-  typeof el.dataset[key] !== "undefined";
+// const exit = (el: HTMLElement, i?: number) => {
+//   el.dataset.willExit = "";
+//   setCustomProperties(el, { i });
+// };
 
-const presence = async (element: HTMLElement) =>
-  new Promise(resolve => {
-    const onEnd = () => {
-      element.removeEventListener("transitionend", onEnd);
-      element.removeEventListener("animationend", onEnd);
-      resolve();
-    };
-    element.addEventListener("transitionend", onEnd);
-    element.addEventListener("animationend", onEnd);
-  });
+const willExit = (el: HTMLElement, i?: number) => {
+  el.dataset.willExit = '';
+  setCustomProperties(el, { i });
+}
 
 @Component({
   tag: "animate-presence",
@@ -59,39 +52,47 @@ export class AnimatePresence {
     this.mo = undefined;
   }
 
-  async enterNode(el: HTMLElement) {
+  async enterNode(el: HTMLElement, i?: number) {
+    el.dataset.initial = "";
     el.dataset.enter = "";
-    await presence(el);
-    delete el.dataset.enter;
-    console.log("enter");
+    setCustomProperties(el, { i });
+
+    await presence(el, {
+      afterSelf: () => {
+        delete el.dataset.initial;
+        delete el.dataset.enter;
+        el.style.removeProperty('--i');
+      }
+    });
   }
 
   async exitNode(el: HTMLElement) {
     delete el.dataset.willExit;
-    setTimeout(() => (el.dataset.exit = ""), 0);
-    await presence(el);
-    el.remove();
+    el.dataset.exit = "";
+
+    await presence(el, {
+      afterSelf: () => el.remove()
+    });
   }
 
-  async handleEnter(node: Node, _record: MutationRecord) {
+  async handleEnter(node: Node, _record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
-    if (is(node, "exit")) return;
+    if (hasData(node, "exit")) return;
 
-    if (is(node, "willExit")) {
+    if (hasData(node, "willExit")) {
       return this.exitNode(node);
     } else {
-      return this.enterNode(node);
+      return this.enterNode(node, i);
     }
   }
 
-  async handleExit(node: Node, record: MutationRecord) {
+  async handleExit(node: Node, record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
-    if (is(node, "exit") || is(node, "willExit")) {
-      console.log("exit");
+    if (hasData(node, "exit") || hasData(node, "willExit")) {
       return;
     }
 
-    node.dataset.willExit = "";
+    willExit(node, i);
     if (isHTMLElement(record.previousSibling)) {
       record.previousSibling.insertAdjacentElement("afterend", node);
     } else if (isHTMLElement(record.target)) {
@@ -99,37 +100,39 @@ export class AnimatePresence {
     }
   }
 
-  async handleKeyChange(node: Node, record: MutationRecord) {
-    if (!isHTMLElement(node)) return;
-    const sibling = node.previousSibling;
-    const parent = node.parentElement;
+  // async handleKeyChange(node: Node, record: MutationRecord) {
+  //   if (!isHTMLElement(node)) return;
+  //   const sibling = node.previousSibling;
+  //   const parent = node.parentElement;
 
-    await this.exitNode(node);
-    delete node.dataset.exit;
-    if (isHTMLElement(sibling)) {
-      sibling.insertAdjacentElement("afterend", node);
-    } else {
-      parent.prepend(node);
-    }
-    await this.enterNode(node);
-    console.log("keychange", node, record);
-  }
+  //   await this.exitNode(node);
+  //   delete node.dataset.exit;
+  //   if (isHTMLElement(sibling)) {
+  //     sibling.insertAdjacentElement("afterend", node);
+  //   } else {
+  //     parent.prepend(node);
+  //   }
+  //   await this.enterNode(node);
+  //   console.log("keychange", node, record);
+  // }
 
   handleMutation(records: MutationRecord[]) {
+    let i = 0;
     for (const record of records.reverse()) {
-      if (record.type === "attributes") {
-        if (record.attributeName === "data-will-exit") {
-          this.exitNode(record.target as HTMLElement);
-        } else {
-          this.handleKeyChange(record.target, record);
-        }
-      }
+      // if (record.type === "attributes") {
+      //   if (record.attributeName === "data-will-exit") {
+      //     this.exitNode(record.target as HTMLElement);
+      //   } else {
+      //     this.handleKeyChange(record.target, record);
+      //   }
+      // }
       if (record.addedNodes.length === 1) {
-        this.handleEnter(record.addedNodes[0], record);
+        this.handleEnter(record.addedNodes[0], record, records.length - i);
       }
       if (record.removedNodes.length === 1) {
-        this.handleExit(record.removedNodes[0], record);
+        this.handleExit(record.removedNodes[0], record, i);
       }
+      i++;
     }
   }
 
@@ -141,16 +144,12 @@ export class AnimatePresence {
       }
     }
   }
-  
-  @Method()
-  async exit() {
-    
-  }
 
   @Method()
-  async enter() {
-    
-  }
+  async exit() {}
+
+  @Method()
+  async enter() {}
 
   render() {
     return (
