@@ -1,10 +1,6 @@
-import { Component, h, Element, Host, Prop, Watch, Method, State, Event, EventEmitter, Listen } from "@stencil/core";
-import { setCustomProperties, isHTMLElement, hasData, presence, closest, nextTick } from "../../utils";
+import { Component, h, Element, Host, Prop, Watch, Method, Event, EventEmitter } from "@stencil/core";
+import { setCustomProperties, isHTMLElement, hasData, presence, closest } from "../../utils";
 
-
-const willExit = (el: HTMLElement, i?: number) => {
-  
-}
 
 @Component({
   tag: "animate-presence",

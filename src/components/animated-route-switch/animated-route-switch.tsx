@@ -7,22 +7,13 @@ import {
   LocationSegments
 } from "@stencil/router";
 
-import { presence } from '../../utils';
-
 const exitChildren = async (el: HTMLElement) => {
     return Promise.all(Array.from(el.querySelectorAll("animate-presence")).map(el => el.exit()));
 }
 
 const enterChildren = async (el: HTMLElement) => {
   return Promise.all(
-    Array.from(el.children).map(async (child: HTMLElement) => {
-        await presence(child, {
-          afterSelf: () => {
-            delete child.dataset.enter;
-          }
-        });
-        return;
-    })
+    Array.from(el.querySelectorAll("animate-presence")).map(el => el.enter())
   );
 };
 
