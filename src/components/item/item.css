@@ -1,0 +1,45 @@
+.dot {
+    --size: 32px;
+    width: var(--size);
+    height: var(--size);
+    border-radius: calc(var(--size) / 2);
+    background: red;
+    margin: 0 8px;
+}
+
+.dot[data-initial] {
+    opacity: 0;
+    transform: translateY(-12px);
+}
+
+.dot[data-enter] {
+  animation: enter 200ms calc(var(--i, 0) * 50ms)
+    cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+.dot[data-exit] {
+  animation: exit 1s calc(var(--i, 0) * 500ms)
+    cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes exit {
+  0% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}

@@ -50,14 +50,9 @@ export class List {
         </div>
         <animate-presence>
           {this.items.map(i => (
-            <div class="item" data-key={i}>
+            <test-item class="item" data-key={i}>
               Item {i + 1}
-              <animate-presence>
-                <div class="dot" />
-                <div class="dot" />
-                <div class="dot" />
-              </animate-presence>
-            </div>
+            </test-item>
           ))}
         </animate-presence>
       </main>

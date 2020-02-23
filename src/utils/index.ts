@@ -2,15 +2,17 @@ export const nextTick = /*@__PURE__*/(cb: () => void) => Promise.resolve().then(
 
 export const presence = (
   element: HTMLElement,
-  hooks: { afterChildren?: () => void; afterSelf?: () => void } = {}
+  hooks: { afterChildren?: () => Promise<void>; afterSelf?: () => void } = {},
 ) => {
-    const { afterSelf } = hooks;
+    const { afterChildren, afterSelf } = hooks;
     return new Promise(async resolve => {
       const {
         animationName,
         animationDuration,
         transitionDuration
       } = window.getComputedStyle(element);
+
+      await afterChildren?.();
 
       if (animationName !== "none" && animationDuration !== "0s") {
         listen("animation");
@@ -97,3 +99,17 @@ export const isHTMLElement = (node: Node): node is HTMLElement =>
   typeof (node as HTMLElement).tagName !== "undefined";
 
 export const hasData = (el: HTMLElement, key: string) => typeof el.dataset[key] !== "undefined";
+
+export function closest(selector: string, base = this) {
+  try {
+      function closestFrom(el: Node|Window) {
+          if (!el || el === document || el === window) return null;
+          let found = (el as HTMLElement).closest(selector);
+          return found ? found : closestFrom(((el as HTMLElement).getRootNode() as any).host);
+      }
+
+      return closestFrom(base);
+  } catch (e) {
+    return null;
+  }
+}
