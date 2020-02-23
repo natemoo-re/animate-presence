@@ -34,13 +34,13 @@ export class Route {
                   routeRender={() => (
                     <animate-presence>
                       <div class="balls">
-                        <shadow-root>
-                            <div class="ball" />
-                            <div class="ball" />
-                            <div class="ball" />
-                            <div class="ball" />
-                            <div class="ball" />
-                        </shadow-root>
+                        <animate-presence>
+                          <div class="ball" />
+                          <div class="ball" />
+                          <div class="ball" />
+                          <div class="ball" />
+                          <div class="ball" />
+                        </animate-presence>
                       </div>
                       <div class="item">Item A</div>
                       <div class="item">Item B</div>
