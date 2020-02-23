@@ -1,10 +1,9 @@
-import { Component, h, Element, Host, Prop, Watch, Method, State } from "@stencil/core";
+import { Component, h, Element, Host, Prop, Watch, Method, State, Event, EventEmitter, Listen } from "@stencil/core";
 import { setCustomProperties, isHTMLElement, hasData, presence, closest, nextTick } from "../../utils";
 
 
 const willExit = (el: HTMLElement, i?: number) => {
-  el.dataset.willExit = '';
-  i !== 0 && setCustomProperties(el, { i });
+  
 }
 
 @Component({
@@ -78,38 +77,38 @@ export class AnimatePresence {
     this.descendants = [];
   }
 
-  async enterNode(el: HTMLElement, i?: number) {
+  async enterNode(el: HTMLElement, i: number = 0) {
     el.dataset.initial = "";
     el.dataset.enter = "";
-    i !== 0 && setCustomProperties(el, { i });
+    setCustomProperties(el, { i });
 
     await presence(el, {
       afterSelf: async () => {
         delete el.dataset.initial;
         delete el.dataset.enter;
-        i !== 0 && el.style.removeProperty("--i");
+        el.style.removeProperty("--i");
       }
     });
 
     const children = Array.from(el.querySelectorAll("animate-presence"));
-    console.log(children);
     return Promise.all(children.map(child => child.enter()));
   }
 
   async exitNode(
     el: HTMLElement,
     method: "remove" | "hide" = "remove",
-    i?: number
+    i: number = 0
   ) {
+    const children = Array.from(el.querySelectorAll("animate-presence"));
     await Promise.all(
-      Array.from(el.querySelectorAll("animate-presence")).map(el => el.exit())
+      children.map(child => child.exit())
     );
-    return presence(el, {
-      afterChildren: async () => {
-        delete el.dataset.willExit;
-        i !== 0 && setCustomProperties(el, { i });
-        el.dataset.exit = "";
-      },
+
+    delete el.dataset.willExit;
+    setCustomProperties(el, { i });
+    el.dataset.exit = "";
+
+    await presence(el, {
       afterSelf: () => {
         if (method === "remove") {
           el.remove();
@@ -118,6 +117,8 @@ export class AnimatePresence {
         }
       }
     });
+
+    return Promise.resolve();
   }
 
   async handleEnter(node: Node, _record: MutationRecord, i?: number) {
@@ -137,7 +138,9 @@ export class AnimatePresence {
       return;
     }
 
-    willExit(node, i);
+    node.dataset.willExit = "";
+    i !== 0 && setCustomProperties(node, { i });
+
     if (isHTMLElement(record.previousSibling)) {
       record.previousSibling.insertAdjacentElement("afterend", node);
     } else if (isHTMLElement(record.target)) {
@@ -191,13 +194,30 @@ export class AnimatePresence {
     return;
   }
 
+  @Event() exitComplete: EventEmitter<void>;
+  
+  private willExit: boolean = false;
+  private didExit: boolean = false;
+
+  // @Listen('exitComplete')
+  // protected exitCompleteHandler(event: CustomEvent) {
+  //   // event.stopPropagation();
+  // }
+
   @Method()
   async exit() {
-    return Promise.all(
+    if (this.didExit || this.willExit) return;
+    this.willExit = true;
+    await Promise.all(
       Array.from(this.element.children).map((el, i) =>
         this.exitNode(el as HTMLElement, "hide", i)
       )
     );
+    console.log('All exited');
+    this.didExit = true;
+    this.willExit = false;
+    this.exitComplete.emit();
+    return Promise.resolve();
   }
 
   private willEnter: boolean = false;

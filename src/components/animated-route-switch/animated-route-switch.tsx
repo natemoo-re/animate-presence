@@ -17,9 +17,6 @@ const enterChildren = async (el: HTMLElement) => {
   return Promise.all(
     Array.from(el.children).map(async (child: HTMLElement) => {
         await presence(child, {
-          afterChildren: async () => {
-            child.dataset.enter = "";
-          },
           afterSelf: () => {
             delete child.dataset.enter;
           }

@@ -2,17 +2,15 @@ export const nextTick = /*@__PURE__*/(cb: () => void) => Promise.resolve().then(
 
 export const presence = (
   element: HTMLElement,
-  hooks: { afterChildren?: () => Promise<void>; afterSelf?: () => void } = {},
+  hooks: { afterSelf?: () => void } = {},
 ) => {
-    const { afterChildren, afterSelf } = hooks;
+    const { afterSelf } = hooks;
     return new Promise(async resolve => {
       const {
         animationName,
         animationDuration,
         transitionDuration
       } = window.getComputedStyle(element);
-
-      await afterChildren?.();
 
       if (animationName !== "none" && animationDuration !== "0s") {
         listen("animation");
@@ -28,7 +26,8 @@ export const presence = (
       }
 
       function onEnd(name: string) {
-        return function() {
+        return function(event: Event) {
+          if (event.target !== element) return;
           element.removeEventListener(`${name}end`, this);
           afterSelf?.();
           resolve();

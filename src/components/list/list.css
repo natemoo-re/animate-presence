@@ -20,8 +20,8 @@
 /**
   * Runs the exit animation.
   */
-.item[data-exit] {
-  animation: exit 200ms calc(var(--i, 0) * 50ms)
+[data-exit] {
+  animation: exit 1s calc(var(--i, 0) * .5s)
     cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
