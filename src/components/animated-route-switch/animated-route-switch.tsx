@@ -6,14 +6,17 @@ import {
   MatchResults,
   LocationSegments
 } from "@stencil/router";
+import { getTopLevelChildren } from '../../utils';
 
 const exitChildren = async (el: HTMLElement) => {
-    return Promise.all(Array.from(el.querySelectorAll("animate-presence")).map(el => el.exit()));
+    return Promise.all(
+      getTopLevelChildren(el).map((el: HTMLAnimatePresenceElement) => el.exit())
+    );
 }
 
 const enterChildren = async (el: HTMLElement) => {
   return Promise.all(
-    Array.from(el.querySelectorAll("animate-presence")).map(el => el.enter())
+    getTopLevelChildren(el).map((el: HTMLAnimatePresenceElement) => el.enter())
   );
 };
 

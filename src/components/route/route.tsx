@@ -32,21 +32,32 @@ export class Route {
                   url="/"
                   exact={true}
                   routeRender={() => (
-                    <animate-presence>
-                      <div class="balls">
-                        <animate-presence>
-                          <div class="ball" />
-                          <div class="ball" />
-                          <div class="ball" />
-                          <div class="ball" />
-                          <div class="ball" />
-                        </animate-presence>
-                      </div>
-                      <div class="item">Item A</div>
-                      <div class="item">Item B</div>
-                      <div class="item">Item C</div>
-                      <div class="item">Item D</div>
-                    </animate-presence>
+                    <div>
+                      <h1>Hello world!</h1>
+                      <animate-presence>
+                        <div class="balls">
+                          <animate-presence>
+                            <div class="ball" />
+                            <div class="ball" />
+                            <div class="ball" />
+                            <div class="ball" />
+                            <div class="ball" />
+                          </animate-presence>
+                        </div>
+                        <div class="item">Item A</div>
+                        <div class="item">Item B</div>
+                        <div class="item">Item C</div>
+                        <div class="item">Item D</div>
+                        <div>
+                          <animate-presence>
+                            <div class="item">Item A1</div>
+                            <div class="item">Item B1</div>
+                            <div class="item">Item C1</div>
+                            <div class="item">Item D1</div>
+                          </animate-presence>
+                        </div>
+                      </animate-presence>
+                    </div>
                   )}
                 />
                 <stencil-route

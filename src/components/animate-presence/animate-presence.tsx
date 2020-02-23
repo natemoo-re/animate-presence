@@ -1,38 +1,27 @@
-import { Component, h, Element, Host, Prop, Watch, Method, Event, EventEmitter } from "@stencil/core";
-import { setCustomProperties, isHTMLElement, hasData, presence, closest } from "../../utils";
-
+import { Component, h, Element, Host, Prop, Watch, Method, Event, EventEmitter, Listen } from "@stencil/core";
+import { setCustomProperties, isHTMLElement, hasData, presence, closest, enterChildren, exitChildren } from "../../utils";
 
 @Component({
   tag: "animate-presence",
   shadow: true
 })
 export class AnimatePresence {
-  /** @private */
+  
+  /** @internal */
   @Prop() __presenceKey = `animate-presence-${ids++}`;
 
   @Element() element: HTMLAnimatePresenceElement;
 
-  @Prop() observe: boolean = true;
-  @Prop() initial: boolean = true;
-
   @Prop() descendants: HTMLAnimatePresenceElement[] = [];
-  // @Watch("descendants")
-  // async descendantsChanged(descendants) {
-  //   // for (const el of descendants) {
-  //   //   if (!this._entering.has(el)) {
-  //   //     this._entering.set(el, true);
-  //   //     el.enter();
-  //   //   }
-  //   // }
-  // }
 
   private ancestor: HTMLAnimatePresenceElement;
 
+  @Prop({ mutable: true }) observe: boolean;
+
   @Watch("observe")
   observeChanged() {
-    if (!this.mo) return;
-
     if (this.observe) {
+      this.addMO();
       this.mo.observe(this.element, {
         childList: true,
         attributes: true,
@@ -58,12 +47,17 @@ export class AnimatePresence {
 
   async componentWillLoad() {
     this.ancestor = this.getClosestParent();
+    if (typeof this.observe === "undefined") {
+      this.observe = this.ancestor?.observe ?? true;
+    }
   }
 
   async componentDidLoad() {
-    this.addMO();
+    this.observeChanged();
     this.ancestor?.registerChild(this.element);
-    Array.from(this.element.children).map(el => (el as HTMLElement).dataset.initial = '');
+    Array.from(this.element.children).map(
+      el => ((el as HTMLElement).dataset.initial = "")
+    );
     if (!this.ancestor) this.enter();
   }
 
@@ -74,6 +68,7 @@ export class AnimatePresence {
   }
 
   async enterNode(el: HTMLElement, i: number = 0) {
+    delete el.dataset.exit;
     el.dataset.initial = "";
     el.dataset.enter = "";
     setCustomProperties(el, { i });
@@ -86,8 +81,7 @@ export class AnimatePresence {
       }
     });
 
-    const children = Array.from(el.querySelectorAll("animate-presence"));
-    return Promise.all(children.map(child => child.enter()));
+    return enterChildren(el);
   }
 
   async exitNode(
@@ -95,10 +89,7 @@ export class AnimatePresence {
     method: "remove" | "hide" = "remove",
     i: number = 0
   ) {
-    const children = Array.from(el.querySelectorAll("animate-presence"));
-    await Promise.all(
-      children.map(child => child.exit())
-    );
+    await exitChildren(el);
 
     delete el.dataset.willExit;
     setCustomProperties(el, { i });
@@ -122,7 +113,7 @@ export class AnimatePresence {
     if (hasData(node, "exit")) return;
 
     if (hasData(node, "willExit")) {
-      return this.exitNode(node, 'remove', i);
+      return this.exitNode(node, "remove", i);
     } else {
       return this.enterNode(node, i);
     }
@@ -191,25 +182,24 @@ export class AnimatePresence {
   }
 
   @Event() exitComplete: EventEmitter<void>;
-  
+
   private willExit: boolean = false;
   private didExit: boolean = false;
 
-  // @Listen('exitComplete')
-  // protected exitCompleteHandler(event: CustomEvent) {
-  //   // event.stopPropagation();
-  // }
+  @Listen('exitComplete')
+  protected exitCompleteHandler(event: CustomEvent) {
+    event.stopPropagation();
+  }
 
   @Method()
   async exit() {
     if (this.didExit || this.willExit) return;
     this.willExit = true;
     await Promise.all(
-      Array.from(this.element.children).map((el, i) =>
+      Array.from(this.element.children).reverse().map((el, i) =>
         this.exitNode(el as HTMLElement, "hide", i)
       )
     );
-    console.log('All exited');
     this.didExit = true;
     this.willExit = false;
     this.exitComplete.emit();
@@ -221,6 +211,8 @@ export class AnimatePresence {
 
   @Method()
   async enter() {
+    this.didExit = false;
+    this.willExit = false;
     if (this.didEnter || this.willEnter) return;
     this.willEnter = true;
     await Promise.all(
@@ -228,11 +220,7 @@ export class AnimatePresence {
         this.enterNode(el as HTMLElement, i)
       )
     );
-    await Promise.all(
-      Array.from(this.element.querySelectorAll("animate-presence")).map(el =>
-        el.enter()
-      )
-    );
+    await enterChildren(this.element);
     this.didEnter = true;
     this.willEnter = false;
     return Promise.resolve();

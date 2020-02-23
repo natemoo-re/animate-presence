@@ -112,3 +112,23 @@ export function closest(selector: string, base = this) {
     return null;
   }
 }
+
+export const getTopLevelChildren = (el: HTMLElement): HTMLAnimatePresenceElement[] => {
+  const all = Array.from(el.querySelectorAll("animate-presence"));
+  const nested = Array.from(
+    el.querySelectorAll(":scope animate-presence animate-presence")
+  );
+  return all.filter(el => !nested.includes(el));
+}
+
+export const exitChildren = async (el: HTMLElement) => {
+  return Promise.all(
+    getTopLevelChildren(el).map((el: HTMLAnimatePresenceElement) => el.exit())
+  );
+};
+
+export const enterChildren = async (el: HTMLElement) => {
+  return Promise.all(
+    getTopLevelChildren(el).map((el: HTMLAnimatePresenceElement) => el.enter())
+  );
+};

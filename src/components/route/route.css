@@ -19,7 +19,7 @@
 }
 
 .item[data-exit] {
-  animation: exit 400ms calc(var(--i, 0) * 30ms)
+  animation: exit 200ms calc(var(--i, 0) * 50ms)
     cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
@@ -48,12 +48,12 @@
 }
 
 .ball[data-enter] {
-  animation: ball-enter 1s calc(var(--i, 0) * 50ms)
+  animation: ball-enter 200ms calc(var(--i, 0) * 50ms)
     cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
 .ball[data-exit] {
-  animation: ball-exit 1s calc(var(--i, 0) * 50ms)
+  animation: ball-exit 300ms calc(var(--i, 0) * 50ms)
     cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
