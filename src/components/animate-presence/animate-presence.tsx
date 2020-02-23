@@ -126,7 +126,7 @@ export class AnimatePresence {
     if (hasData(node, "exit")) return;
 
     if (hasData(node, "willExit")) {
-      return this.exitNode(node);
+      return this.exitNode(node, 'remove', i);
     } else {
       return this.enterNode(node, i);
     }
