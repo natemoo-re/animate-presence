@@ -1,10 +1,9 @@
 import { Component, Element, Prop, Watch, h } from '@stencil/core';
 import { QueueApi } from "@stencil/core/dist/declarations";
 import {
-  injectHistory,
   matchPath,
   MatchResults,
-  LocationSegments
+  LocationSegments,
 } from "@stencil/router";
 import { getTopLevelChildren } from '../../utils';
 
@@ -55,7 +54,7 @@ export class AnimatedRouteSwitch {
 
   @Prop({ reflectToAttr: true }) group: string = getUniqueId();
   @Prop() scrollTopOffset?: number;
-  @Prop() location?: LocationSegments;
+  @Prop() location: LocationSegments;
   @Prop() routeViewsUpdated?: (options: any) => void;
 
   activeIndex?: number;
@@ -65,11 +64,15 @@ export class AnimatedRouteSwitch {
   componentWillLoad() {
     if (this.location != null) {
       this.regenerateSubscribers(this.location);
+    } else {
+      console.warn(`<animated-route-switch> requires the "location" prop in order to be wired to Stencil Router.`);
     }
   }
 
+
   @Watch("location")
   async regenerateSubscribers(newLocation: LocationSegments) {
+    console.log(newLocation);
     if (newLocation == null) {
       return;
     }
@@ -157,4 +160,3 @@ export class AnimatedRouteSwitch {
     return <slot />;
   }
 }
-injectHistory(AnimatedRouteSwitch);

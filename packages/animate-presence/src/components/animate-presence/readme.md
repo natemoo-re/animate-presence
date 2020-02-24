@@ -7,12 +7,60 @@
 
 ## Properties
 
-| Property         | Attribute | Description | Type      | Default |
-| ---------------- | --------- | ----------- | --------- | ------- |
-| `observe`        | `observe` |             | `boolean` | `true`  |
-| `observeMount`   | `mount`   |             | `boolean` | `true`  |
-| `observeUnmount` | `unmount` |             | `boolean` | `true`  |
-| `shallow`        | `shallow` |             | `boolean` | `true`  |
+| Property      | Attribute | Description | Type                           | Default     |
+| ------------- | --------- | ----------- | ------------------------------ | ----------- |
+| `descendants` | --        |             | `HTMLAnimatePresenceElement[]` | `[]`        |
+| `observe`     | `observe` |             | `boolean`                      | `undefined` |
+
+
+## Events
+
+| Event          | Description | Type                |
+| -------------- | ----------- | ------------------- |
+| `exitComplete` |             | `CustomEvent<void>` |
+
+
+## Methods
+
+### `enter() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `exit() => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `registerChild(el: HTMLAnimatePresenceElement) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
+
+### `unregisterChild(key: string) => Promise<void>`
+
+
+
+#### Returns
+
+Type: `Promise<void>`
+
+
 
 
 ----------------------------------------------
