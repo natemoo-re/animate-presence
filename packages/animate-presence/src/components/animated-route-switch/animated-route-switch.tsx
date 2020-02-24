@@ -5,20 +5,7 @@ import {
   MatchResults,
   LocationSegments,
 } from "@stencil/router";
-import { getTopLevelChildren } from '../../utils';
-
-const exitChildren = async (el: HTMLElement) => {
-    return Promise.all(
-      getTopLevelChildren(el).map((el: HTMLAnimatePresenceElement) => el.exit())
-    );
-}
-
-const enterChildren = async (el: HTMLElement) => {
-  return Promise.all(
-    getTopLevelChildren(el).map((el: HTMLAnimatePresenceElement) => el.enter())
-  );
-};
-
+import { enterChildren, exitChildren } from "../../utils";
 
 interface Child {
   el: HTMLStencilRouteElement,
@@ -48,14 +35,18 @@ const isHTMLStencilRouteElement = (elm: Element): elm is HTMLStencilRouteElement
 export class AnimatedRouteSwitch {
   @Element() el!: HTMLElement;
 
-  @Prop() registry: HTMLAnimatePresenceElement[] = [];
-  
+  /** @internal */
   @Prop({ context: "queue" }) queue!: QueueApi;
 
+  /** @internal */
   @Prop({ reflectToAttr: true }) group: string = getUniqueId();
-  @Prop() scrollTopOffset?: number;
-  @Prop() location: LocationSegments;
+
+  /** @internal */
   @Prop() routeViewsUpdated?: (options: any) => void;
+
+  @Prop() scrollTopOffset?: number;
+
+  @Prop() location: LocationSegments;
 
   activeIndex?: number;
   prevIndex?: number;
@@ -65,10 +56,11 @@ export class AnimatedRouteSwitch {
     if (this.location != null) {
       this.regenerateSubscribers(this.location);
     } else {
-      console.warn(`<animated-route-switch> requires the "location" prop in order to be wired to Stencil Router.`);
+      console.warn(
+        `<animated-route-switch> requires the "location" prop in order to be wired to Stencil Router.`
+      );
     }
   }
-
 
   @Watch("location")
   async regenerateSubscribers(newLocation: LocationSegments) {
@@ -122,7 +114,7 @@ export class AnimatedRouteSwitch {
       await exitChildren(prevChild.el);
     }
     const activeChild = this.subscribers[this.activeIndex];
-    if (this.scrollTopOffset) {
+    if (typeof this.scrollTopOffset === 'number') {
       activeChild.el.scrollTopOffset = this.scrollTopOffset;
     }
     activeChild.el.group = this.group;
@@ -138,7 +130,7 @@ export class AnimatedRouteSwitch {
             return enterChildren(child.el);
           }
 
-          if (this.scrollTopOffset) {
+          if (typeof this.scrollTopOffset === 'number') {
             child.el.scrollTopOffset = this.scrollTopOffset;
           }
           child.el.group = this.group;
