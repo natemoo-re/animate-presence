@@ -6,16 +6,27 @@ import { setCustomProperties, isHTMLElement, hasData, presence, closest, enterCh
   shadow: true
 })
 export class AnimatePresence {
-  
+  @Element() element: HTMLAnimatePresenceElement;
+
   /** @internal */
   @Prop() __presenceKey = `animate-presence-${ids++}`;
 
-  @Element() element: HTMLAnimatePresenceElement;
-
+  /** @internal */
   @Prop() descendants: HTMLAnimatePresenceElement[] = [];
 
   private ancestor: HTMLAnimatePresenceElement;
 
+  /**
+   * If `true` (default), a MutationObserver will automatically be connected to enable animations when a child node enters/exits.
+   *
+   * If you know the children are static (typical `animated-route-switch` use case), `false` may improve performance.
+   *
+   * Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value,
+   *
+   * which means MutationObservers can be disabled for the entire tree by setting `observe={false}` on the top-level element.
+   *
+   * However, directly set values always take precedence over inherited values.
+   */
   @Prop({ mutable: true }) observe: boolean;
 
   @Watch("observe")
@@ -67,7 +78,7 @@ export class AnimatePresence {
     this.descendants = [];
   }
 
-  async enterNode(el: HTMLElement, i: number = 0) {
+  private async enterNode(el: HTMLElement, i: number = 0) {
     delete el.dataset.exit;
     el.dataset.initial = "";
     el.dataset.enter = "";
@@ -84,7 +95,7 @@ export class AnimatePresence {
     return enterChildren(el);
   }
 
-  async exitNode(
+  private async exitNode(
     el: HTMLElement,
     method: "remove" | "hide" = "remove",
     i: number = 0
@@ -108,7 +119,7 @@ export class AnimatePresence {
     return Promise.resolve();
   }
 
-  async handleEnter(node: Node, _record: MutationRecord, i?: number) {
+  private async handleEnter(node: Node, _record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
     if (hasData(node, "exit")) return;
 
@@ -119,7 +130,7 @@ export class AnimatePresence {
     }
   }
 
-  async handleExit(node: Node, record: MutationRecord, i?: number) {
+  private async handleExit(node: Node, record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
     if (hasData(node, "exit") || hasData(node, "willExit")) {
       return;
@@ -135,7 +146,7 @@ export class AnimatePresence {
     }
   }
 
-  handleMutation(records: MutationRecord[]) {
+  private handleMutation(records: MutationRecord[]) {
     let i = 0;
     for (const record of records.reverse()) {
       if (record.addedNodes.length === 1) {
@@ -164,6 +175,7 @@ export class AnimatePresence {
     }
   }
 
+  /** @internal Registers a child element across shadow boundaries */
   @Method()
   async registerChild(el: HTMLAnimatePresenceElement) {
     const key = el.__presenceKey;
@@ -175,30 +187,41 @@ export class AnimatePresence {
     return;
   }
 
+  /** @internal */
   @Method()
   async unregisterChild(key: string) {
     this.descendants = this.descendants.filter(el => el.__presenceKey !== key);
     return;
   }
 
+  /**
+   * Fires when all exiting nodes have completed animating out.
+   *
+   * To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent.
+   */
   @Event() exitComplete: EventEmitter<void>;
 
   private willExit: boolean = false;
   private didExit: boolean = false;
 
-  @Listen('exitComplete')
+  @Listen("exitComplete")
   protected exitCompleteHandler(event: CustomEvent) {
     event.stopPropagation();
   }
 
+  /**
+   * Programmatically triggers an exit.
+   *
+   * Nested `<animate-presence>` children will be animated out from the bottom up, meaning that children elements trigger a parent's exit after their own exit finishes.
+   */
   @Method()
   async exit() {
     if (this.didExit || this.willExit) return;
     this.willExit = true;
     await Promise.all(
-      Array.from(this.element.children).reverse().map((el, i) =>
-        this.exitNode(el as HTMLElement, "hide", i)
-      )
+      Array.from(this.element.children)
+        .reverse()
+        .map((el, i) => this.exitNode(el as HTMLElement, "hide", i))
     );
     this.didExit = true;
     this.willExit = false;
@@ -209,6 +232,11 @@ export class AnimatePresence {
   private willEnter: boolean = false;
   private didEnter: boolean = false;
 
+  /**
+   * Programmatically triggers an entrance.
+   *
+   * Nested `<animate-presence>` children will be animated in from the top down, meaning that parent elements trigger a child's entrance after their own entrance finishes.
+   */
   @Method()
   async enter() {
     this.didExit = false;
