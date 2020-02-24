@@ -7,13 +7,10 @@
 
 ## Properties
 
-| Property            | Attribute           | Description | Type                           | Default         |
-| ------------------- | ------------------- | ----------- | ------------------------------ | --------------- |
-| `group`             | `group`             |             | `string`                       | `getUniqueId()` |
-| `location`          | --                  |             | `LocationSegments`             | `undefined`     |
-| `registry`          | --                  |             | `HTMLAnimatePresenceElement[]` | `[]`            |
-| `routeViewsUpdated` | --                  |             | `(options: any) => void`       | `undefined`     |
-| `scrollTopOffset`   | `scroll-top-offset` |             | `number`                       | `undefined`     |
+| Property          | Attribute           | Description | Type               | Default     |
+| ----------------- | ------------------- | ----------- | ------------------ | ----------- |
+| `location`        | --                  |             | `LocationSegments` | `undefined` |
+| `scrollTopOffset` | `scroll-top-offset` |             | `number`           | `undefined` |
 
 
 ----------------------------------------------
