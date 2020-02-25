@@ -4,7 +4,6 @@ import { external } from "./plugin-externals";
 
 export const config: Config = {
          namespace: "animate-presence",
-         copy: [{ src: "static" }],
          plugins: [external()],
          outputTargets: [
            {
