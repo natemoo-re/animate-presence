@@ -26,5 +26,13 @@
   "peerDependencies": {
     "@stencil/router": "^1.0.1"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/natemoo-re/animate-presence.git"
+  },
+  "bugs": {
+    "url": "https://github.com/natemoo-re/animate-presence/issues"
+  },
+  "homepage": "https://github.com/natemoo-re/animate-presence/packages/animate-presence#readme"
 }
