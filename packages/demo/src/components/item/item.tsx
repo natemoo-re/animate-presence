@@ -1,4 +1,4 @@
-import { Component, h, Host } from '@stencil/core';
+import { Component, h, Host, Prop } from '@stencil/core';
 
 
 @Component({
@@ -7,13 +7,15 @@ import { Component, h, Host } from '@stencil/core';
 })
 export class Item {
 
+    @Prop() index: number = 0;
+
     render() {
         return (
           <Host class="item">
             <animate-presence>
-              <div class="dot" />
-              <div class="dot" />
-              <div class="dot" />
+              {Array.from({ length: this.index }, () => (
+                  <div class="dot" />
+              ))}
               <slot />
             </animate-presence>
           </Host>

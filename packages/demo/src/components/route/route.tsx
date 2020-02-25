@@ -1,11 +1,14 @@
-import { Component, h } from '@stencil/core';
-import '@stencil/router';
+import { Component, h, Prop } from '@stencil/core';
+import { injectHistory, LocationSegments } from "@stencil/router";
 
 @Component({
     tag: 'route-demo',
     styleUrl: 'route.css'
 })
 export class Route {
+
+    @Prop() location: LocationSegments;
+
     render() {
         return (
           <stencil-router>
@@ -27,75 +30,98 @@ export class Route {
             </nav>
 
             <main>
-              <stencil-route url="/" routeRender={(...args) => (
-                  <animated-route-switch {...(args as any)}>
-                    <stencil-route
-                      url="/"
-                      exact={true}
-                      routeRender={() => (
-                        <div>
-                          <h1>Hello world!</h1>
+              <stencil-route url="/">
+                <animated-route-switch location={this.location}>
+                  <stencil-route
+                    url="/"
+                    exact={true}
+                    routeRender={() => (
+                      <animate-presence class="home">
+                        <div class="balls">
                           <animate-presence>
-                            <div class="balls">
-                              <animate-presence>
-                                <div class="ball" />
-                                <div class="ball" />
-                                <div class="ball" />
-                                <div class="ball" />
-                                <div class="ball" />
-                              </animate-presence>
-                            </div>
-                            <div class="item">
-                              Item A
-                              <stencil-route-link url="/c">
-                                C
-                              </stencil-route-link>
-                            </div>
-                            <div class="item">Item B</div>
-                            <div class="item">Item C</div>
-                            <div class="item">Item D</div>
-                            <div>
-                              <animate-presence>
-                                <div class="item">Item A1</div>
-                                <div class="item">Item B1</div>
-                                <div class="item">Item C1</div>
-                                <div class="item">Item D1</div>
-                              </animate-presence>
-                            </div>
+                            <div class="ball" />
                           </animate-presence>
                         </div>
-                      )}
-                    />
-                    <stencil-route
-                      url="/a"
-                      routeRender={() => (
-                        <animate-presence>
-                          <div class="item">Item E</div>
-                          <div class="item">Item F</div>
-                        </animate-presence>
-                      )}
-                    />
-                    <stencil-route
-                      url="/b"
-                      routeRender={() => (
-                        <animate-presence>
-                          <div class="b">Render /b</div>
-                        </animate-presence>
-                      )}
-                    />
-                    <stencil-route
-                      url="/c"
-                      routeRender={() => (
-                        <animate-presence>
-                          <div class="c">Render /c</div>
-                        </animate-presence>
-                      )}
-                    />
-                  </animated-route-switch>
-                )}>
+                        <div class="item">Item A</div>
+                        <div class="item">
+                          <stencil-route-link url="/a">
+                            Go to /a
+                          </stencil-route-link>
+                        </div>
+                      </animate-presence>
+                    )}
+                  />
+                  <stencil-route
+                    url="/a"
+                    routeRender={() => (
+                      <animate-presence class="a">
+                        <div class="balls">
+                          <animate-presence>
+                            <div class="ball" />
+                            <div class="ball" />
+                          </animate-presence>
+                        </div>
+                        <div class="item">Item A1</div>
+                        <div class="item">Item B1</div>
+                        <div class="item">
+                          <stencil-route-link url="/b">
+                            Go to /b
+                          </stencil-route-link>
+                        </div>
+                      </animate-presence>
+                    )}
+                  />
+                  <stencil-route
+                    url="/b"
+                    routeRender={() => (
+                      <animate-presence class="b">
+                        <div class="balls">
+                          <animate-presence>
+                            <div class="ball" />
+                            <div class="ball" />
+                            <div class="ball" />
+                          </animate-presence>
+                        </div>
+                        <div class="item">Item A2</div>
+                        <div class="item">Item B2</div>
+                        <div class="item">Item C2</div>
+                        <div class="item">
+                          <stencil-route-link url="/c">
+                            Go to /c
+                          </stencil-route-link>
+                        </div>
+                      </animate-presence>
+                    )}
+                  />
+                  <stencil-route
+                    url="/c"
+                    routeRender={() => (
+                      <animate-presence class="c">
+                        <div class="balls">
+                          <animate-presence>
+                            <div class="ball" />
+                            <div class="ball" />
+                            <div class="ball" />
+                            <div class="ball" />
+                          </animate-presence>
+                        </div>
+                        <div class="item">Item A3</div>
+                        <div class="item">Item B3</div>
+                        <div class="item">Item C3</div>
+                        <div class="item">Item D3</div>
+                        <div class="item">
+                          <stencil-route-link url="/">
+                            Go Home
+                          </stencil-route-link>
+                        </div>
+                      </animate-presence>
+                    )}
+                  />
+                </animated-route-switch>
               </stencil-route>
             </main>
           </stencil-router>
         );
     }
 }
+injectHistory(Route)

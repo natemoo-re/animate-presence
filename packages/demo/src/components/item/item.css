@@ -1,11 +1,15 @@
+.item {
+  justify-content: center;
+}
+
 .dot {
     --j: var(--i);
-    --size: 32px;
+    --size: 16px;
     width: var(--size);
     height: var(--size);
     border-radius: calc(var(--size) / 2);
-    background: red;
-    margin: 0 8px;
+    background: #673AB7;
+    margin: 0 16px;
 }
 
 .dot[data-initial] {
@@ -19,7 +23,7 @@
 }
 
 .dot[data-exit] {
-  animation: exit 120ms calc(var(--i, 0) * 50ms)
+  animation: exit 120ms calc(var(--i, 0) * 20ms)
     cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 

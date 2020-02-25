@@ -6,11 +6,11 @@ import { Component, h, State, Watch } from '@stencil/core';
 })
 export class List {
   
-  @State() items: number[] = [0, 1];
+  @State() items: number[] = [1, 2];
   @State() batch = false;
   @Watch('items')
   itemsChanged() {
-      this.batch = this.items.length % 5 === 0;
+      this.batch = this.items.length % 4 === 0;
   }
 
   render() {
@@ -23,7 +23,7 @@ export class List {
               const max = Math.max(...this.items, 0);
               this.items = !this.batch
                 ? [...this.items, max + 1]
-                : [...this.items, max + 1, max + 2, max + 3, max + 4];
+                : [...this.items, max + 1, max + 2];
             }}
           >
             Add {this.batch ? "a few" : ""}
@@ -33,25 +33,15 @@ export class List {
             onClick={() => {
               this.items = !this.batch
                 ? this.items.slice(0, -1)
-                : this.items.slice(0, -3);
+                : this.items.slice(0, -2);
             }}
           >
             Remove {this.batch ? "a few" : ""}
           </button>
-          <button
-            id="move"
-            onClick={() => {
-              this.items = [...this.items.slice(1), ...this.items.slice(0, 1)];
-            }}
-          >
-            Move item to end
-          </button>
         </div>
         <animate-presence>
           {this.items.map(i => (
-            <test-item class="item" data-key={i}>
-              Item {i + 1}
-            </test-item>
+            <test-item class="item" index={i} />
           ))}
         </animate-presence>
       </main>
