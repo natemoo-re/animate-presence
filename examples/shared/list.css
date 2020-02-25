@@ -1,3 +1,7 @@
+animate-presence {
+  visibility: hidden;
+}
+
 * {
   box-sizing: border-box;
 }
@@ -79,4 +83,17 @@ button:last-of-type:active {
 
 .dot + .dot {
     margin-left: 16px;
+}
+
+
+.item + h2 {
+  margin-top: 2em;
+}
+
+.item a {
+  flex: 1;
+  text-decoration: none;
+  color: inherit;
+  margin: -16px;
+  padding: 16px;
 }
