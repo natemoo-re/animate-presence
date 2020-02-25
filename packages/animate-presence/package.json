@@ -1,7 +1,7 @@
 {
   "name": "animate-presence",
   "version": "0.1.0",
-  "description": "Web Component to manage mount/unmount of child nodes",
+  "description": "Effortless element entrance/exit animations",
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "es2015": "dist/esm/index.mjs",
