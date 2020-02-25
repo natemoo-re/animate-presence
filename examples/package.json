@@ -1,0 +1,11 @@
+{
+  "name": "examples",
+  "version": "0.1.1",
+  "main": "basic/index.html",
+  "scripts": {
+    "start": "serve"
+  },
+  "devDependencies": {
+    "serve": "^11.2.0"
+  }
+}
