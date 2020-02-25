@@ -16,6 +16,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "animate-presence": "^0.1.0"
+    "animate-presence": "^0.1.1"
   }
 }
