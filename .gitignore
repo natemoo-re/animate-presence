@@ -3,7 +3,6 @@ dist
 loader
 www
 examples/lib
-components.d.ts
 .stencil
 .cache
 .DS_Store
