@@ -19,16 +19,12 @@
     <!-- Setup animations for enter and exit -->
     <style>
       .item {
+        overflow: hidden;
         justify-content: center;
       }
 
-      .item[data-initial] {
-        opacity: 0;
-        transform: translateY(100%) scale(1.05);
-      }
-
       .item[data-enter] {
-        animation: enter 300ms calc(var(--i, 0) * 50ms)
+        animation: enter 300ms calc(var(--i, 0) * 100ms)
           cubic-bezier(0.165, 0.84, 0.44, 1);
       }
 
@@ -37,17 +33,13 @@
           cubic-bezier(0.165, 0.84, 0.44, 1);
       }
 
-      .dot[data-initial] {
-        opacity: 0;
-      }
-
       .dot[data-enter] {
-        animation: dot-enter 100ms calc(var(--i, 0) * 10ms)
+        animation: dot-enter 1s calc(var(--i, 0) * 10ms)
           cubic-bezier(0.165, 0.84, 0.44, 1);
       }
 
       .dot[data-exit] {
-        animation: dot-exit 100ms calc(var(--i, 0) * 10ms)
+        animation: dot-exit 300ms calc(var(--i, 0) * 10ms)
           cubic-bezier(0.165, 0.84, 0.44, 1);
       }
 
@@ -75,12 +67,16 @@
 
       @keyframes dot-enter {
         0% {
-          opacity: 0;
-          transform: translateY(-8px);
+          opacity: 0.25;
+          transform: scale(0.9);
+        }
+        33% {
+          opacity: 1;
+          transform: scale(1.25);
         }
         100% {
           opacity: 1;
-          transform: translateY(0);
+          transform: scale(1);
         }
       }
 

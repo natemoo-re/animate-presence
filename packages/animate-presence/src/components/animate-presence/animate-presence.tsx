@@ -18,6 +18,7 @@ import {
   closest,
   enterChildren,
   exitChildren,
+  injectGlobalStyle,
 } from '../../utils';
 
 @Component({
@@ -76,19 +77,24 @@ export class AnimatePresence {
   }
 
   async componentWillLoad() {
+    injectGlobalStyle();
     this.ancestor = this.getClosestParent();
     if (typeof this.observe === 'undefined') {
       this.observe = this.ancestor?.observe ?? true;
     }
+    Array.from(this.element.children).map((el: HTMLElement, i) => {
+      setCustomProperties(el, { i });
+      el.style.setProperty('animation-play-state', 'paused');
+      (el as HTMLElement).dataset.enter = '';
+    });
   }
 
   async componentDidLoad() {
     this.observeChanged();
     this.ancestor?.registerChild(this.element);
-    Array.from(this.element.children).map(
-      el => ((el as HTMLElement).dataset.initial = '')
-    );
-    if (!this.ancestor) this.enter();
+    if (!this.ancestor) {
+      this.enter();
+    }
   }
 
   async componentDidUnload() {
@@ -99,7 +105,12 @@ export class AnimatePresence {
 
   private async enterNode(el: HTMLElement, i: number = 0) {
     delete el.dataset.exit;
-    el.dataset.initial = '';
+    const event = new CustomEvent('animatePresenceEnter', {
+      bubbles: true,
+      detail: { i },
+    });
+    el.dispatchEvent(event);
+    el.style.removeProperty('animation-play-state');
     el.dataset.enter = '';
     setCustomProperties(el, { i });
 
@@ -123,6 +134,11 @@ export class AnimatePresence {
 
     delete el.dataset.willExit;
     setCustomProperties(el, { i });
+    const event = new CustomEvent('animatePresenceExit', {
+      bubbles: true,
+      detail: { i },
+    });
+    el.dispatchEvent(event);
     el.dataset.exit = '';
 
     await presence(el, {
@@ -218,13 +234,27 @@ export class AnimatePresence {
    *
    * To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent.
    */
-  @Event() exitComplete: EventEmitter<void>;
+  @Event() animatePresenceExitComplete: EventEmitter<void>;
+
+  /**
+   * Dispatched on a child when it enters.
+   *
+   * This event can be used as a hook to animate `event.target` with the Web Animations API.
+   */
+  @Event() animatePresenceEnter: EventEmitter<{ i: number }>;
+
+  /**
+   * Dispatched on a child when it exits.
+   *
+   * This event can be used as a hook to animate `event.target` with the Web Animations API.
+   */
+  @Event() animatePresenceExit: EventEmitter<{ i: number }>;
 
   private willExit: boolean = false;
   private didExit: boolean = false;
 
-  @Listen('exitComplete')
-  protected exitCompleteHandler(event: CustomEvent) {
+  @Listen('animatePresenceExitComplete')
+  protected animatePresenceExitCompleteHandler(event: CustomEvent) {
     event.stopPropagation();
   }
 
@@ -244,7 +274,7 @@ export class AnimatePresence {
     );
     this.didExit = true;
     this.willExit = false;
-    this.exitComplete.emit();
+    this.animatePresenceExitComplete.emit();
     return Promise.resolve();
   }
 

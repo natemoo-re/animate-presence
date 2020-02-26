@@ -1,13 +1,4 @@
 /**
-  * Items about to enter can be set to hidden with
-  * this initial style. It avoids any visual flicker
-  */
-.item[data-initial] {
-  opacity: 0;
-  transform: translateY(100%) scale(1.05);
-}
-
-/**
   * Runs the enter animation. 
   * --i is automatically set to enable staggered animations,
   * but you can also choose to ignore it

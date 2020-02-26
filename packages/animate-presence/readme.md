@@ -21,7 +21,7 @@
 
 ---
 
-Unlike most animation libraries, there's no new API to learn&mdash;just use CSS.
+Unlike most animation libraries, there's no new API to learn&mdash;just use CSS or the [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API).
 
 Here's a basic example:
 
@@ -58,11 +58,16 @@ Once the animation finishes, `<animate-presence>` automatically cleans itself up
 
 ## Attributes
 
-| Attribute      | Description                                                                                                                    |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------ |
-| `data-enter`   | Applied immediately when a node enters. Trigger your entrance animation here.                                                  |
-| `data-exit`    | Applied when a node will be removed. Trigger your exit animations here. The node will be removed when the animation completes. |
-| `data-initial` | Applied immediately when a node enters. Useful for hiding an element before a delayed entrance.                                |
+| Attribute    | Description                                                                                                                    |
+| ------------ | ------------------------------------------------------------------------------------------------------------------------------ |
+| `data-enter` | Applied immediately when a node enters. Trigger your entrance animation here.                                                  |
+| `data-exit`  | Applied when a node will be removed. Trigger your exit animations here. The node will be removed when the animation completes. |
+
+> **Note** Animate Presence overrides the default `animation-fill-mode` of animating children to `both` (rather than `none`).
+> This provides more reasonable default behavior in most situations, so the rule is injected with a [specificity](https://developer.mozilla.org/en-US/docs/Web/CSS/Specificity) (`021`) high enough to override the `animation` shorthand for most rules (like `.item[data-enter]`).
+
+> If you experience visual flickering at the start or end of an animation, you may be using a selector with a higher specificity than `021`.
+> The `animation` shorthand resets the `animation-fill-mode` to `none`, so you likely need to manually specify `both`.
 
 ## Stagger
 
@@ -75,8 +80,6 @@ This makes staggered animations simple with a small `calc` function.
   animation-delay: calc(var(--i, 0) * 50ms);
 }
 ```
-
-> Note: you'll likely want to use `[data-initial]` to hide the element before the `[data-enter]` animation is triggered
 
 ## Nesting
 

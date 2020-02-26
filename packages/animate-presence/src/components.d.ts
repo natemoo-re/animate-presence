@@ -6,7 +6,7 @@
  */
 
 import { HTMLStencilElement, JSXBase } from '@stencil/core/internal';
-import { LocationSegments } from '@stencil/router';
+import { LocationSegments } from './utils/router';
 
 export namespace Components {
   interface AnimatePresence {
@@ -63,6 +63,14 @@ declare namespace LocalJSX {
      * If `true` (default), a MutationObserver will automatically be connected to enable animations when a child node enters/exits.  If you know the children are static (typical `animated-route-switch` use case), `false` may improve performance.  Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value,  which means MutationObservers can be disabled for the entire tree by setting `observe={false}` on the top-level element.  However, directly set values always take precedence over inherited values.
      */
     observe?: boolean;
+    /**
+     * Dispatched on a child when it enters.  This event can be used as a hook to animate `event.target` with the Web Animations API.
+     */
+    onAnimatePresenceEnter?: (event: CustomEvent<{ i: number }>) => void;
+    /**
+     * Dispatched on a child when it exits.  This event can be used as a hook to animate `event.target` with the Web Animations API.
+     */
+    onAnimatePresenceExit?: (event: CustomEvent<{ i: number }>) => void;
     /**
      * Fires when all exiting nodes have completed animating out.  To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent.
      */

@@ -8,11 +8,6 @@
     cubic-bezier(0.165, 0.84, 0.44, 1);
 }
 
-.item[data-initial] {
-  opacity: 0;
-  transform: translateY(-24px);
-}
-
 .item[data-enter] {
   animation: enter 400ms calc(var(--i, 0) * 30ms)
     cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -40,11 +35,6 @@
 
 .ball + .ball {
   margin-left: 16px;
-}
-
-.ball[data-initial] {
-  opacity: 0;
-  transform: translateY(24px);
 }
 
 .ball[data-enter] {
