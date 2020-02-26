@@ -3,7 +3,7 @@
 </div>
 <h3 align="center" style="text-align:center;">Effortless element entrance/exit animations.</h3>
 
-<p align="center" style="text-align:center;color:#eee">
+<h3 align="center" style="text-align:center;color:#eee">
   <a href="https://github.com/natemoo-re/animate-presence">
     <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/chore/readme/.github/assets/logo-github.svg?sanitize=true" alt="GitHub" height="24"/>
   </a>
@@ -15,7 +15,7 @@
   <a href="https://animate-presence.now.sh/">
     <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/chore/readme/.github/assets/learn.svg?sanitize=true" alt="Examples" height="24"/>
   </a>
-</p>
+</h3>
 
 <br />
 
