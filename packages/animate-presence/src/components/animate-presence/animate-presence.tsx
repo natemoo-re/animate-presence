@@ -18,6 +18,7 @@ import {
   closest,
   enterChildren,
   exitChildren,
+  injectGlobalStyle,
 } from '../../utils';
 
 @Component({
@@ -76,6 +77,7 @@ export class AnimatePresence {
   }
 
   async componentWillLoad() {
+    injectGlobalStyle();
     this.ancestor = this.getClosestParent();
     if (typeof this.observe === 'undefined') {
       this.observe = this.ancestor?.observe ?? true;
@@ -99,13 +101,13 @@ export class AnimatePresence {
 
   private async enterNode(el: HTMLElement, i: number = 0) {
     delete el.dataset.exit;
-    const event = new CustomEvent("animatePresenceEnter", {
+    const event = new CustomEvent('animatePresenceEnter', {
       bubbles: true,
-      detail: { i }
+      detail: { i },
     });
     el.dispatchEvent(event);
-    el.dataset.initial = "";
-    el.dataset.enter = "";
+    el.dataset.initial = '';
+    el.dataset.enter = '';
     setCustomProperties(el, { i });
 
     await presence(el, {
@@ -128,12 +130,12 @@ export class AnimatePresence {
 
     delete el.dataset.willExit;
     setCustomProperties(el, { i });
-    const event = new CustomEvent("animatePresenceExit", {
+    const event = new CustomEvent('animatePresenceExit', {
       bubbles: true,
-      detail: { i }
+      detail: { i },
     });
     el.dispatchEvent(event);
-    el.dataset.exit = "";
+    el.dataset.exit = '';
 
     await presence(el, {
       afterSelf: () => {
@@ -150,10 +152,10 @@ export class AnimatePresence {
 
   private async handleEnter(node: Node, _record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
-    if (hasData(node, "exit")) return;
+    if (hasData(node, 'exit')) return;
 
-    if (hasData(node, "willExit")) {
-      return this.exitNode(node, "remove", i);
+    if (hasData(node, 'willExit')) {
+      return this.exitNode(node, 'remove', i);
     } else {
       return this.enterNode(node, i);
     }

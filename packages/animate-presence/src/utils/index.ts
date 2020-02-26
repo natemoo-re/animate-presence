@@ -5,33 +5,34 @@ export const presence = (
   element: HTMLElement,
   hooks: { afterSelf?: () => void } = {}
 ) => {
-    const { afterSelf } = hooks;
-    return new Promise(async resolve => {
-      // If WAAPI getAnimations exists, use that
-      if (typeof element.getAnimations !== 'undefined') {
-        Promise.all(element.getAnimations().map(anim => anim.finished))
-          .then(() => {
-            afterSelf?.();
-            resolve();
-            return;
-          });
-      } else {
-        // Otherwise grab the computed style to check what listeners to attach
-        // or bail out if there aren't any animations/transitions set
-        const {
-          animationName,
-          animationDuration,
-          transitionDuration
-        } = window.getComputedStyle(element);
-
-        if (animationName !== "none" && animationDuration !== "0s") {
-          listen("animation");
-        } else if (transitionDuration !== "0s") {
-          listen("transition");
-        } else {
+  const { afterSelf } = hooks;
+  return new Promise(async resolve => {
+    // If WAAPI getAnimations exists, use that
+    if (typeof element.getAnimations !== 'undefined') {
+      Promise.all(element.getAnimations().map(anim => anim.finished)).then(
+        () => {
           afterSelf?.();
           resolve();
+          return;
         }
+      );
+    } else {
+      // Otherwise grab the computed style to check what listeners to attach
+      // or bail out if there aren't any animations/transitions set
+      const {
+        animationName,
+        animationDuration,
+        transitionDuration,
+      } = window.getComputedStyle(element);
+
+      if (animationName !== 'none' && animationDuration !== '0s') {
+        listen('animation');
+      } else if (transitionDuration !== '0s') {
+        listen('transition');
+      } else {
+        afterSelf?.();
+        resolve();
+      }
       // }
       function listen(name: string) {
         element.addEventListener(`${name}end`, onEnd(name));
@@ -48,7 +49,7 @@ export const presence = (
       }
     }
   });
-}
+};
 
 const kebab = (str: string) => str.replace(/([A-Z])/g, `-$1`).toLowerCase();
 
@@ -144,4 +145,14 @@ export const enterChildren = async (el: HTMLElement) => {
   return Promise.all(
     getTopLevelChildren(el).map((el: HTMLAnimatePresenceElement) => el.enter())
   );
+};
+
+export const injectGlobalStyle = () => {
+  let ss = document.head.querySelector('[data-ap-global]');
+  if (ss) return;
+
+  ss = document.createElement('style');
+  (ss as HTMLElement).dataset.apGlobal = '';
+  ss.textContent = `animate-presence>[data-enter][style*="--i:"],animate-presence>[data-exit][style*="--i:"]{animation-fill-mode:both;}`;
+  document.head.appendChild(ss);
 };
