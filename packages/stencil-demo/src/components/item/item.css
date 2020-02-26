@@ -12,11 +12,6 @@
   margin: 0 16px;
 }
 
-.dot[data-initial] {
-  opacity: 0;
-  transform: translateY(-12px);
-}
-
 .dot[data-enter] {
   animation: enter 150ms calc(var(--i, 0) * 30ms)
     cubic-bezier(0.165, 0.84, 0.44, 1);

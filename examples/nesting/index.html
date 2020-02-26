@@ -22,11 +22,6 @@
         justify-content: center;
       }
 
-      .item[data-initial] {
-        opacity: 0;
-        transform: translateY(100%) scale(1.05);
-      }
-
       .item[data-enter] {
         animation: enter 300ms calc(var(--i, 0) * 50ms)
           cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -35,10 +30,6 @@
       .item[data-exit] {
         animation: exit 200ms calc(var(--i, 0) * 50ms)
           cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
-
-      .dot[data-initial] {
-        opacity: 0;
       }
 
       .dot[data-enter] {
