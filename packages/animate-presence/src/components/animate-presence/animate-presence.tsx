@@ -82,15 +82,19 @@ export class AnimatePresence {
     if (typeof this.observe === 'undefined') {
       this.observe = this.ancestor?.observe ?? true;
     }
+    Array.from(this.element.children).map((el: HTMLElement, i) => {
+      setCustomProperties(el, { i });
+      el.style.setProperty('animation-play-state', 'paused');
+      (el as HTMLElement).dataset.enter = '';
+    });
   }
 
   async componentDidLoad() {
     this.observeChanged();
     this.ancestor?.registerChild(this.element);
-    Array.from(this.element.children).map(
-      el => ((el as HTMLElement).dataset.initial = '')
-    );
-    if (!this.ancestor) this.enter();
+    if (!this.ancestor) {
+      this.enter();
+    }
   }
 
   async componentDidUnload() {
@@ -106,7 +110,7 @@ export class AnimatePresence {
       detail: { i },
     });
     el.dispatchEvent(event);
-    el.dataset.initial = '';
+    el.style.removeProperty('animation-play-state');
     el.dataset.enter = '';
     setCustomProperties(el, { i });
 
