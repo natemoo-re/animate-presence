@@ -7,7 +7,7 @@
 
 ---
 
-Unlike most animation libraries, there's no new API to learn&mdash;just use CSS.
+Unlike most animation libraries, there's no new API to learn&mdash;just use CSS or the [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API).
 
 Here's a basic example:
 
