@@ -1,16 +1,15 @@
 import { Component, h, State, Watch } from '@stencil/core';
 
 @Component({
-  tag: "list-demo",
-  styleUrl: "list.css"
+  tag: 'list-demo',
+  styleUrl: 'list.css',
 })
 export class List {
-  
   @State() items: number[] = [1, 2];
   @State() batch = false;
   @Watch('items')
   itemsChanged() {
-      this.batch = this.items.length % 4 === 0;
+    this.batch = this.items.length % 4 === 0;
   }
 
   render() {
@@ -26,7 +25,7 @@ export class List {
                 : [...this.items, max + 1, max + 2];
             }}
           >
-            Add {this.batch ? "a few" : ""}
+            Add {this.batch ? 'a few' : ''}
           </button>
           <button
             id="remove"
@@ -36,7 +35,7 @@ export class List {
                 : this.items.slice(0, -2);
             }}
           >
-            Remove {this.batch ? "a few" : ""}
+            Remove {this.batch ? 'a few' : ''}
           </button>
         </div>
         <animate-presence>

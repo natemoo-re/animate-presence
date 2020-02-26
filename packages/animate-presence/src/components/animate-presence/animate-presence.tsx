@@ -1,9 +1,28 @@
-import { Component, h, Element, Host, Prop, Watch, Method, Event, EventEmitter, Listen } from "@stencil/core";
-import { setCustomProperties, isHTMLElement, hasData, presence, closest, enterChildren, exitChildren } from "../../utils";
+import {
+  Component,
+  h,
+  Element,
+  Host,
+  Prop,
+  Watch,
+  Method,
+  Event,
+  EventEmitter,
+  Listen,
+} from '@stencil/core';
+import {
+  setCustomProperties,
+  isHTMLElement,
+  hasData,
+  presence,
+  closest,
+  enterChildren,
+  exitChildren,
+} from '../../utils';
 
 @Component({
-  tag: "animate-presence",
-  shadow: true
+  tag: 'animate-presence',
+  shadow: true,
 })
 export class AnimatePresence {
   @Element() element: HTMLAnimatePresenceElement;
@@ -29,14 +48,14 @@ export class AnimatePresence {
    */
   @Prop({ mutable: true }) observe: boolean;
 
-  @Watch("observe")
+  @Watch('observe')
   observeChanged() {
     if (this.observe) {
       this.addMO();
       this.mo.observe(this.element, {
         childList: true,
         attributes: true,
-        attributeFilter: ["data-key"]
+        attributeFilter: ['data-key'],
       });
     } else {
       this.removeMO();
@@ -58,7 +77,7 @@ export class AnimatePresence {
 
   async componentWillLoad() {
     this.ancestor = this.getClosestParent();
-    if (typeof this.observe === "undefined") {
+    if (typeof this.observe === 'undefined') {
       this.observe = this.ancestor?.observe ?? true;
     }
   }
@@ -67,7 +86,7 @@ export class AnimatePresence {
     this.observeChanged();
     this.ancestor?.registerChild(this.element);
     Array.from(this.element.children).map(
-      el => ((el as HTMLElement).dataset.initial = "")
+      el => ((el as HTMLElement).dataset.initial = '')
     );
     if (!this.ancestor) this.enter();
   }
@@ -80,16 +99,16 @@ export class AnimatePresence {
 
   private async enterNode(el: HTMLElement, i: number = 0) {
     delete el.dataset.exit;
-    el.dataset.initial = "";
-    el.dataset.enter = "";
+    el.dataset.initial = '';
+    el.dataset.enter = '';
     setCustomProperties(el, { i });
 
     await presence(el, {
       afterSelf: async () => {
         delete el.dataset.initial;
         delete el.dataset.enter;
-        el.style.removeProperty("--i");
-      }
+        el.style.removeProperty('--i');
+      },
     });
 
     return enterChildren(el);
@@ -97,23 +116,23 @@ export class AnimatePresence {
 
   private async exitNode(
     el: HTMLElement,
-    method: "remove" | "hide" = "remove",
+    method: 'remove' | 'hide' = 'remove',
     i: number = 0
   ) {
     await exitChildren(el);
 
     delete el.dataset.willExit;
     setCustomProperties(el, { i });
-    el.dataset.exit = "";
+    el.dataset.exit = '';
 
     await presence(el, {
       afterSelf: () => {
-        if (method === "remove") {
+        if (method === 'remove') {
           el.remove();
-        } else if (method === "hide") {
-          el.style.setProperty("visibility", "hidden");
+        } else if (method === 'hide') {
+          el.style.setProperty('visibility', 'hidden');
         }
-      }
+      },
     });
 
     return Promise.resolve();
@@ -121,10 +140,10 @@ export class AnimatePresence {
 
   private async handleEnter(node: Node, _record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
-    if (hasData(node, "exit")) return;
+    if (hasData(node, 'exit')) return;
 
-    if (hasData(node, "willExit")) {
-      return this.exitNode(node, "remove", i);
+    if (hasData(node, 'willExit')) {
+      return this.exitNode(node, 'remove', i);
     } else {
       return this.enterNode(node, i);
     }
@@ -132,15 +151,15 @@ export class AnimatePresence {
 
   private async handleExit(node: Node, record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
-    if (hasData(node, "exit") || hasData(node, "willExit")) {
+    if (hasData(node, 'exit') || hasData(node, 'willExit')) {
       return;
     }
 
-    node.dataset.willExit = "";
+    node.dataset.willExit = '';
     setCustomProperties(node, { i });
 
     if (isHTMLElement(record.previousSibling)) {
-      record.previousSibling.insertAdjacentElement("afterend", node);
+      record.previousSibling.insertAdjacentElement('afterend', node);
     } else if (isHTMLElement(record.target)) {
       record.target.prepend(node);
     }
@@ -150,7 +169,7 @@ export class AnimatePresence {
     let i = 0;
     for (const record of records.reverse()) {
       if (record.addedNodes.length === 1) {
-        this.handleEnter(record.addedNodes[0], record, (records.length - 1) - i);
+        this.handleEnter(record.addedNodes[0], record, records.length - 1 - i);
       }
       if (record.removedNodes.length === 1) {
         this.handleExit(record.removedNodes[0], record, i);
@@ -161,7 +180,7 @@ export class AnimatePresence {
 
   private addMO() {
     if (!this.mo) {
-      if ("MutationObserver" in window) {
+      if ('MutationObserver' in window) {
         this.mo = new MutationObserver(this.handleMutation);
         this.observeChanged();
       }
@@ -182,7 +201,7 @@ export class AnimatePresence {
     // Remove existing elements with same key to handle HMR
     this.descendants = [
       ...this.descendants.filter(element => element.__presenceKey !== key),
-      el
+      el,
     ];
     return;
   }
@@ -204,7 +223,7 @@ export class AnimatePresence {
   private willExit: boolean = false;
   private didExit: boolean = false;
 
-  @Listen("exitComplete")
+  @Listen('exitComplete')
   protected exitCompleteHandler(event: CustomEvent) {
     event.stopPropagation();
   }
@@ -221,7 +240,7 @@ export class AnimatePresence {
     await Promise.all(
       Array.from(this.element.children)
         .reverse()
-        .map((el, i) => this.exitNode(el as HTMLElement, "hide", i))
+        .map((el, i) => this.exitNode(el as HTMLElement, 'hide', i))
     );
     this.didExit = true;
     this.willExit = false;
@@ -256,7 +275,7 @@ export class AnimatePresence {
 
   render() {
     return (
-      <Host style={{ display: "contents" }}>
+      <Host style={{ display: 'contents' }}>
         <slot />
       </Host>
     );

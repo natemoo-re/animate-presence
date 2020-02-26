@@ -4,10 +4,9 @@ import { Logo } from '../logo';
 @Component({
   tag: 'app-home',
   styleUrl: 'app-home.css',
-  scoped: true
+  scoped: true,
 })
 export class AppHome {
-
   render() {
     return (
       <div class="app-home">

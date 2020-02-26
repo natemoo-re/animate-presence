@@ -1,9 +1,6 @@
 # route-demo
 
-
-
 <!-- Auto Generated Below -->
-
 
 ## Dependencies
 
@@ -16,6 +13,7 @@
 - [animate-presence](../../components/animate-presence)
 
 ### Graph
+
 ```mermaid
 graph TD;
   route-demo --> stencil-router
@@ -26,6 +24,6 @@ graph TD;
   style route-demo fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

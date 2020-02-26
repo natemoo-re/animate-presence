@@ -3,18 +3,18 @@
 }
 
 .dot {
-    --j: var(--i);
-    --size: 16px;
-    width: var(--size);
-    height: var(--size);
-    border-radius: calc(var(--size) / 2);
-    background: #673AB7;
-    margin: 0 16px;
+  --j: var(--i);
+  --size: 16px;
+  width: var(--size);
+  height: var(--size);
+  border-radius: calc(var(--size) / 2);
+  background: #673ab7;
+  margin: 0 16px;
 }
 
 .dot[data-initial] {
-    opacity: 0;
-    transform: translateY(-12px);
+  opacity: 0;
+  transform: translateY(-12px);
 }
 
 .dot[data-enter] {

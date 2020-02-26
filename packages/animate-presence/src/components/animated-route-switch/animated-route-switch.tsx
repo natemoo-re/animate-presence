@@ -1,42 +1,39 @@
 import { Component, Element, Prop, Watch, h } from '@stencil/core';
-import { QueueApi } from "@stencil/core/dist/declarations";
-import {
-  matchPath,
-  MatchResults,
-  LocationSegments,
-} from "@stencil/router";
-import { enterChildren, exitChildren } from "../../utils";
+import { QueueApi } from '@stencil/core/dist/declarations';
+import { matchPath, MatchResults, LocationSegments } from '@stencil/router';
+import { enterChildren, exitChildren } from '../../utils';
 
 interface Child {
-  el: HTMLStencilRouteElement,
-  match: MatchResults | null
+  el: HTMLStencilRouteElement;
+  match: MatchResults | null;
 }
 
 const getUniqueId = () => {
   return ((Math.random() * 10e16).toString().match(/.{4}/g) || []).join('-');
-}
+};
 
 const getMatch = (pathname: string, url: any, exact: boolean) => {
   return matchPath(pathname, {
     path: url,
     exact: exact,
-    strict: true
+    strict: true,
   });
-}
+};
 
-const isHTMLStencilRouteElement = (elm: Element): elm is HTMLStencilRouteElement => {
+const isHTMLStencilRouteElement = (
+  elm: Element
+): elm is HTMLStencilRouteElement => {
   return elm.tagName === 'STENCIL-ROUTE';
-}
-
+};
 
 @Component({
-  tag: "animated-route-switch"
+  tag: 'animated-route-switch',
 })
 export class AnimatedRouteSwitch {
   @Element() el!: HTMLElement;
 
   /** @internal */
-  @Prop({ context: "queue" }) queue!: QueueApi;
+  @Prop({ context: 'queue' }) queue!: QueueApi;
 
   /** @internal */
   @Prop({ reflectToAttr: true }) group: string = getUniqueId();
@@ -62,7 +59,7 @@ export class AnimatedRouteSwitch {
     }
   }
 
-  @Watch("location")
+  @Watch('location')
   async regenerateSubscribers(newLocation: LocationSegments) {
     console.log(newLocation);
     if (newLocation == null) {
@@ -87,7 +84,7 @@ export class AnimatedRouteSwitch {
           }
           return {
             el: childElement,
-            match: match
+            match: match,
           };
         }
       );
@@ -126,7 +123,7 @@ export class AnimatedRouteSwitch {
           child.el.componentUpdated = undefined;
 
           if (index === this.activeIndex) {
-            child.el.style.display = "";
+            child.el.style.display = '';
             return enterChildren(child.el);
           }
 
@@ -135,14 +132,14 @@ export class AnimatedRouteSwitch {
           }
           child.el.group = this.group;
           child.el.match = null;
-          child.el.style.display = "none";
+          child.el.style.display = 'none';
         });
       });
 
       if (this.routeViewsUpdated) {
         this.routeViewsUpdated({
           scrollTopOffset: this.scrollTopOffset,
-          ...routeViewUpdatedOptions
+          ...routeViewUpdatedOptions,
         });
       }
     };

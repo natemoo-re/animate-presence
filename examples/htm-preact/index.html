@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Animate Presence | HTM + Preact</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta http-equiv="x-ua-compatible" content="IE=Edge">
+  <head>
+    <meta charset="utf-8" />
+    <title>Animate Presence | HTM + Preact</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge" />
 
-  <link rel="stylesheet" href="../shared/list.css" />
+    <link rel="stylesheet" href="../shared/list.css" />
 
-  <!-- Import animate-presence web component -->
-  <script type="module" src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.esm.js"></script>
-  <script nomodule="" src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.js"></script>
-  
-  <!-- Setup animations for enter and exit -->
+    <!-- Import animate-presence web component -->
+    <script
+      type="module"
+      src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.esm.js"
+    ></script>
+    <script
+      nomodule=""
+      src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.js"
+    ></script>
+
+    <!-- Setup animations for enter and exit -->
     <style>
       [data-enter] {
         animation: enter 300ms cubic-bezier(0.165, 0.84, 0.44, 1);
@@ -46,41 +55,53 @@
       }
     </style>
   </head>
-    <body>
-        <script type="module">
-          import { html, Component, render } from 'https://unpkg.com/htm/preact/standalone.module.js';
-          
-          class App extends Component {
-            add() {
-              const items = this.state.items || [];
-              this.setState({ items: items.concat(`Item ${items.length + 1}`) });
-            }
+  <body>
+    <script type="module">
+      import {
+        html,
+        Component,
+        render,
+      } from 'https://unpkg.com/htm/preact/standalone.module.js';
 
-            remove() {
-              const items = this.state.items || [];
-              this.setState({ items: items.slice(0, -1) });
-            }
+      class App extends Component {
+        add() {
+          const items = this.state.items || [];
+          this.setState({ items: items.concat(`Item ${items.length + 1}`) });
+        }
 
+        remove() {
+          const items = this.state.items || [];
+          this.setState({ items: items.slice(0, -1) });
+        }
 
-            render({ }, { items = [] }) {
-              return html`
-                <div class="app">
-                  <div class="buttons">
-                    <button id="add" onClick=${this.add.bind(this)}>Add</button>
-                    <button id="remove" onClick=${this.remove.bind(this)}>Remove</button>
-                  </div>
+        render({}, { items = [] }) {
+          return html`
+            <div class="app">
+              <div class="buttons">
+                <button id="add" onClick=${this.add.bind(this)}>Add</button>
+                <button id="remove" onClick=${this.remove.bind(this)}>
+                  Remove
+                </button>
+              </div>
 
-                  <animate-presence>
-                    ${items.map(item => html`
-                      <div class="item">${item}</div>
-                    `)}
-                  </animate-presence>
-                </div>
-              `;
-            }
-          }
+              <animate-presence>
+                ${items.map(
+                  item => html`
+                    <div class="item">${item}</div>
+                  `
+                )}
+              </animate-presence>
+            </div>
+          `;
+        }
+      }
 
-          render(html`<${App} />`, document.body);
-        </script>
-    </body>
+      render(
+        html`
+          <${App} />
+        `,
+        document.body
+      );
+    </script>
+  </body>
 </html>

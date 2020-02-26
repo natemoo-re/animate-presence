@@ -1,15 +1,15 @@
 export function external() {
   return {
-    name: "stencilExternal",
+    name: 'stencilExternal',
     resolveId(id: string) {
-      if (id.indexOf("@stencil/router") > -1) {
+      if (id.indexOf('@stencil/router') > -1) {
         return {
           id,
           external: true,
-          moduleSideEffects: false
+          moduleSideEffects: false,
         };
       }
       return null;
-    }
+    },
   };
 }
