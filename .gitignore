@@ -2,7 +2,7 @@ node_modules
 dist
 loader
 www
-components.d.ts
+examples/lib
 .stencil
 .cache
 .DS_Store

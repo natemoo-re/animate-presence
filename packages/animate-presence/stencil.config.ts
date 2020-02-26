@@ -16,5 +16,10 @@ export const config: Config = {
       type: 'www',
       serviceWorker: null,
     },
+    {
+      type: 'www',
+      dir: '../../examples/lib',
+      serviceWorker: null,
+    },
   ],
 };

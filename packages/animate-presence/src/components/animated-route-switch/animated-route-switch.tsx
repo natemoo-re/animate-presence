@@ -1,10 +1,10 @@
 import { Component, Element, Prop, Watch, h } from '@stencil/core';
 import { QueueApi } from '@stencil/core/dist/declarations';
-import { matchPath, MatchResults, LocationSegments } from '@stencil/router';
+import { matchPath, MatchResults, LocationSegments } from '../../utils/router';
 import { enterChildren, exitChildren } from '../../utils';
 
 interface Child {
-  el: HTMLStencilRouteElement;
+  el: any;
   match: MatchResults | null;
 }
 
@@ -20,9 +20,7 @@ const getMatch = (pathname: string, url: any, exact: boolean) => {
   });
 };
 
-const isHTMLStencilRouteElement = (
-  elm: Element
-): elm is HTMLStencilRouteElement => {
+const isHTMLStencilRouteElement = (elm: Element): elm is any => {
   return elm.tagName === 'STENCIL-ROUTE';
 };
 

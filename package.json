@@ -1,6 +1,10 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "postinstall": "lerna bootstrap",
+    "build": "lerna run build"
+  },
   "dependencies": {},
   "devDependencies": {
     "husky": "^4.2.3",
@@ -16,9 +20,6 @@
   "prettier": {
     "trailingComma": "es5",
     "singleQuote": true
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",

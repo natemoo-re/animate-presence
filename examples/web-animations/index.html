@@ -15,46 +15,6 @@
     <!-- Import animate-presence web component -->
     <script type="module" src="/lib/build/animate-presence.esm.js"></script>
     <script nomodule="" src="/lib/build/animate-presence.js"></script>
-
-    <!-- Setup animations for enter and exit -->
-    <style>
-      [data-initial] {
-        opacity: 0;
-        transform: translateY(100%) scale(1.05);
-      }
-
-      [data-enter] {
-        animation: enter 300ms calc(var(--i, 0) * 50ms)
-          cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
-
-      [data-exit] {
-        animation: exit 200ms calc(var(--i, 0) * 50ms)
-          cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
-
-      @keyframes enter {
-        from {
-          opacity: 0;
-          transform: translateY(100%) scale(1.05);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-
-      @keyframes exit {
-        0% {
-          opacity: 1;
-          transform: translateX(0);
-        }
-        100% {
-          opacity: 0;
-          transform: translateX(128px);
-        }
-      }
-    </style>
   </head>
   <body>
     <div class="buttons">
@@ -69,6 +29,39 @@
       const container = document.querySelector('animate-presence');
       const add = document.getElementById('add');
       const remove = document.getElementById('remove');
+
+      // Handle enter with the Web Animations API
+      container.addEventListener('animatePresenceEnter', event => {
+        event.target.style.setProperty('opacity', '0');
+        event.target.animate(
+          [
+            { opacity: 0, transform: 'translateY(100%) scale(1.05)' },
+            { opacity: 1, transform: 'translateY(0) scale(1)' },
+          ],
+          {
+            duration: 200,
+            delay: event.detail.i * 20,
+            fill: 'forwards',
+            easing: 'cubic-bezier(0.165, 0.84, 0.44, 1)',
+          }
+        );
+      });
+
+      // Handle exit with the Web Animations API
+      container.addEventListener('animatePresenceExit', event => {
+        event.target.animate(
+          [
+            { opacity: 1, transform: 'translateX(0)' },
+            { opacity: 0, transform: 'translateX(128px)' },
+          ],
+          {
+            duration: 200,
+            delay: event.detail.i * 30,
+            fill: 'forwards',
+            easing: 'cubic-bezier(0.165, 0.84, 0.44, 1)',
+          }
+        );
+      });
 
       add.addEventListener('click', () => {
         const nodes = Array.from({ length: randBetween(2, 4) }, (_, i) => {
