@@ -1,23 +1,18 @@
 # animate-presence
 
-
-
 <!-- Auto Generated Below -->
-
 
 ## Properties
 
-| Property  | Attribute | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    | Type      | Default     |
-| --------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | --------- | ----------- |
-| `observe` | `observe` | If `true` (default), a MutationObserver will automatically be connected to enable animations when a child node enters/exits.  If you know the children are static (typical `animated-route-switch` use case), `false` may improve performance.  Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value,  which means MutationObservers can be disabled for the entire tree by setting `observe={false}` on the top-level element.  However, directly set values always take precedence over inherited values. | `boolean` | `undefined` |
-
+| Property  | Attribute | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Type      | Default     |
+| --------- | --------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------- | ----------- |
+| `observe` | `observe` | If `true` (default), a MutationObserver will automatically be connected to enable animations when a child node enters/exits. If you know the children are static (typical `animated-route-switch` use case), `false` may improve performance. Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value, which means MutationObservers can be disabled for the entire tree by setting `observe={false}` on the top-level element. However, directly set values always take precedence over inherited values. | `boolean` | `undefined` |
 
 ## Events
 
-| Event          | Description                                                                                                                                                              | Type                |
-| -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------- |
-| `exitComplete` | Fires when all exiting nodes have completed animating out.  To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent. | `CustomEvent<void>` |
-
+| Event          | Description                                                                                                                                                             | Type                |
+| -------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `exitComplete` | Fires when all exiting nodes have completed animating out. To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent. | `CustomEvent<void>` |
 
 ## Methods
 
@@ -31,8 +26,6 @@ Nested `<animate-presence>` children will be animated in from the top down, mean
 
 Type: `Promise<void>`
 
-
-
 ### `exit() => Promise<void>`
 
 Programmatically triggers an exit.
@@ -43,9 +36,6 @@ Nested `<animate-presence>` children will be animated out from the bottom up, me
 
 Type: `Promise<void>`
 
+---
 
-
-
-----------------------------------------------
-
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

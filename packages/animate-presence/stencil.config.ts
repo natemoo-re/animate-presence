@@ -1,21 +1,20 @@
 import { Config } from '@stencil/core';
-import { external } from "./plugin-externals";
-
+import { external } from './plugin-externals';
 
 export const config: Config = {
-  namespace: "animate-presence",
+  namespace: 'animate-presence',
   plugins: [external()],
   outputTargets: [
     {
-      type: "dist",
-      esmLoaderPath: "../loader"
+      type: 'dist',
+      esmLoaderPath: '../loader',
     },
     {
-      type: "docs-readme"
+      type: 'docs-readme',
     },
     {
-      type: "www",
-      serviceWorker: null
-    }
-  ]
+      type: 'www',
+      serviceWorker: null,
+    },
+  ],
 };

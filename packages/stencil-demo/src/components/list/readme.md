@@ -1,9 +1,6 @@
 # list-demo
 
-
-
 <!-- Auto Generated Below -->
-
 
 ## Dependencies
 
@@ -13,6 +10,7 @@
 - [test-item](../item)
 
 ### Graph
+
 ```mermaid
 graph TD;
   list-demo --> animate-presence
@@ -21,6 +19,6 @@ graph TD;
   style list-demo fill:#f9f,stroke:#333,stroke-width:4px
 ```
 
-----------------------------------------------
+---
 
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

@@ -4,7 +4,7 @@ import { MatchResults } from '@stencil/router';
 @Component({
   tag: 'app-profile',
   styleUrl: 'app-profile.css',
-  scoped: true
+  scoped: true,
 })
 export class AppProfile {
   @Prop() match: MatchResults;

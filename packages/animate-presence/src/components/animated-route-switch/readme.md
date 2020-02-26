@@ -1,9 +1,6 @@
 # animated-route-switch
 
-
-
 <!-- Auto Generated Below -->
-
 
 ## Properties
 
@@ -12,7 +9,6 @@
 | `location`        | --                  |             | `LocationSegments` | `undefined` |
 | `scrollTopOffset` | `scroll-top-offset` |             | `number`           | `undefined` |
 
+---
 
-----------------------------------------------
-
-*Built with [StencilJS](https://stenciljs.com/)*
+_Built with [StencilJS](https://stenciljs.com/)_

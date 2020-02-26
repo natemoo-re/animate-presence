@@ -1,19 +1,28 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Animate Presence | Nesting</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta http-equiv="x-ua-compatible" content="IE=Edge">
+  <head>
+    <meta charset="utf-8" />
+    <title>Animate Presence | Nesting</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge" />
 
-  <link rel="stylesheet" href="../shared/list.css" />
+    <link rel="stylesheet" href="../shared/list.css" />
 
-  <!-- Import animate-presence web component -->
-  <script type="module" src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.esm.js"></script>
-  <script nomodule="" src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.js"></script>
-  
-  <!-- Setup animations for enter and exit -->
+    <!-- Import animate-presence web component -->
+    <script
+      type="module"
+      src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.esm.js"
+    ></script>
+    <script
+      nomodule=""
+      src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.js"
+    ></script>
+
+    <!-- Setup animations for enter and exit -->
     <style>
       .item {
         justify-content: center;
@@ -25,11 +34,13 @@
       }
 
       .item[data-enter] {
-        animation: enter 300ms calc(var(--i, 0) * 50ms) cubic-bezier(0.165, 0.84, 0.44, 1);
+        animation: enter 300ms calc(var(--i, 0) * 50ms)
+          cubic-bezier(0.165, 0.84, 0.44, 1);
       }
 
       .item[data-exit] {
-        animation: exit 200ms calc(var(--i, 0) * 50ms) cubic-bezier(0.165, 0.84, 0.44, 1);
+        animation: exit 200ms calc(var(--i, 0) * 50ms)
+          cubic-bezier(0.165, 0.84, 0.44, 1);
       }
 
       .dot[data-initial] {
@@ -37,13 +48,14 @@
       }
 
       .dot[data-enter] {
-        animation: dot-enter 100ms calc(var(--i, 0) * 10ms) cubic-bezier(0.165, 0.84, 0.44, 1);
+        animation: dot-enter 100ms calc(var(--i, 0) * 10ms)
+          cubic-bezier(0.165, 0.84, 0.44, 1);
       }
 
       .dot[data-exit] {
-        animation: dot-exit 100ms calc(var(--i, 0) * 10ms) cubic-bezier(0.165, 0.84, 0.44, 1);
+        animation: dot-exit 100ms calc(var(--i, 0) * 10ms)
+          cubic-bezier(0.165, 0.84, 0.44, 1);
       }
-
 
       @keyframes enter {
         from {
@@ -90,48 +102,51 @@
       }
     </style>
   </head>
-    <body>
-        <div class="buttons">
-          <button id="add">Add</button>
-          <button id="remove">Remove</button>
-        </div>
+  <body>
+    <div class="buttons">
+      <button id="add">Add</button>
+      <button id="remove">Remove</button>
+    </div>
 
-        <animate-presence></animate-presence>
+    <animate-presence></animate-presence>
 
-        <script type="module">
-          let count = 0;
-          const container = document.querySelector("animate-presence");
-          const add = document.getElementById("add");
-          const remove = document.getElementById("remove");
+    <script type="module">
+      let count = 0;
+      const container = document.querySelector('animate-presence');
+      const add = document.getElementById('add');
+      const remove = document.getElementById('remove');
 
-          add.addEventListener("click", () => {
-            const nodes = Array.from({ length: randBetween(2, 4) }, (_, i) => {
-                const div = document.createElement("div");
-                div.classList.add('item');
-                div.dataset.index = count;
+      add.addEventListener('click', () => {
+        const nodes = Array.from({ length: randBetween(2, 4) }, (_, i) => {
+          const div = document.createElement('div');
+          div.classList.add('item');
+          div.dataset.index = count;
 
-                const ap = document.createElement('animate-presence');
-                 Array.from({ length: randBetween(1, 10) }, (_, j) => {
-                  const dot = document.createElement("div");
-                  dot.classList.add('dot');
-                  ap.appendChild(dot);
-                })
-                div.appendChild(ap);
-
-                count++;
-                return div;
-            }).forEach(node => container.appendChild(node));
+          const ap = document.createElement('animate-presence');
+          Array.from({ length: randBetween(1, 10) }, (_, j) => {
+            const dot = document.createElement('div');
+            dot.classList.add('dot');
+            ap.appendChild(dot);
           });
+          div.appendChild(ap);
 
-          remove.addEventListener("click", () => {
-            const nodes = Array.from({ length: randBetween(2, 4) }, (_, i) => {
-              const child = document.querySelector(`[data-index="${count - 1}"]`);
-              if (child) count--;
-              return child;
-            }).filter(Boolean).reverse().forEach(node => node.remove());
-          });
+          count++;
+          return div;
+        }).forEach(node => container.appendChild(node));
+      });
 
-          const randBetween = (min, max) => Math.floor(Math.random() * max) + min;
-        </script>
-    </body>
+      remove.addEventListener('click', () => {
+        const nodes = Array.from({ length: randBetween(2, 4) }, (_, i) => {
+          const child = document.querySelector(`[data-index="${count - 1}"]`);
+          if (child) count--;
+          return child;
+        })
+          .filter(Boolean)
+          .reverse()
+          .forEach(node => node.remove());
+      });
+
+      const randBetween = (min, max) => Math.floor(Math.random() * max) + min;
+    </script>
+  </body>
 </html>

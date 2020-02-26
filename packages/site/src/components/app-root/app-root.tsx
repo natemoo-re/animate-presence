@@ -2,9 +2,9 @@ import { Component, h, Prop } from '@stencil/core';
 import { injectHistory, LocationSegments } from '@stencil/router';
 
 @Component({
-  tag: "app-root",
-  styleUrl: "app-root.css",
-  scoped: true
+  tag: 'app-root',
+  styleUrl: 'app-root.css',
+  scoped: true,
 })
 export class AppRoot {
   @Prop() location: LocationSegments;

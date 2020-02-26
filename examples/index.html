@@ -1,18 +1,27 @@
 <!DOCTYPE html>
 <html dir="ltr" lang="en">
-<head>
-  <meta charset="utf-8">
-  <title>Animate Presence</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0">
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta http-equiv="x-ua-compatible" content="IE=Edge">
+  <head>
+    <meta charset="utf-8" />
+    <title>Animate Presence</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge" />
 
-  <link rel="stylesheet" href="/shared/list.css" />
+    <link rel="stylesheet" href="/shared/list.css" />
 
-  <!-- Import animate-presence web component -->
-  <script type="module" src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.esm.js"></script>
-  <script nomodule="" src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.js"></script>
-  
+    <!-- Import animate-presence web component -->
+    <script
+      type="module"
+      src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.esm.js"
+    ></script>
+    <script
+      nomodule=""
+      src="https://unpkg.com/animate-presence@latest/dist/animate-presence/animate-presence.js"
+    ></script>
+
     <!-- Setup animations for enter and exit -->
     <style>
       [data-initial] {
@@ -20,7 +29,8 @@
         transform: translateX(-100%);
       }
       [data-enter] {
-        animation: enter 250ms calc(var(--i, 0) * 50ms) cubic-bezier(0.165, 0.84, 0.44, 1);
+        animation: enter 250ms calc(var(--i, 0) * 50ms)
+          cubic-bezier(0.165, 0.84, 0.44, 1);
       }
 
       @keyframes enter {
@@ -35,29 +45,29 @@
       }
     </style>
   </head>
-    <body>
-        <animate-presence>
-            <h1>Examples</h1>
+  <body>
+    <animate-presence>
+      <h1>Examples</h1>
 
-            <h2>Intro</h2>
-            <div class="item">
-                <a href="/basic">Basic</a>
-            </div>
-            <div class="item">
-                <a href="/stagger">Stagger</a>
-            </div>
-            <div class="item">
-                <a href="/nesting">Nesting</a>
-            </div>
+      <h2>Intro</h2>
+      <div class="item">
+        <a href="/basic">Basic</a>
+      </div>
+      <div class="item">
+        <a href="/stagger">Stagger</a>
+      </div>
+      <div class="item">
+        <a href="/nesting">Nesting</a>
+      </div>
 
-            <h2>Libraries</h2>
-            <div class="item">
-                <a href="/htm-preact">HTM + Preact</a>
-            </div>
+      <h2>Libraries</h2>
+      <div class="item">
+        <a href="/htm-preact">HTM + Preact</a>
+      </div>
 
-            <div>
-                <a href="https://github.com/natemoo-re/animate-presence">GitHub</a>
-            </div>
-        </animate-presence>
-    </body>
+      <div>
+        <a href="https://github.com/natemoo-re/animate-presence">GitHub</a>
+      </div>
+    </animate-presence>
+  </body>
 </html>
