@@ -140,10 +140,10 @@ export class AnimatePresence {
 
   private async handleEnter(node: Node, _record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
-    if (hasData(node, 'exit')) return;
-
-    if (hasData(node, 'willExit')) {
-      return this.exitNode(node, 'remove', i);
+    if (hasData(node, "exit")) return;
+    
+    if (hasData(node, "willExit")) {
+      return this.exitNode(node, "remove", i);
     } else {
       return this.enterNode(node, i);
     }
