@@ -1,7 +1,21 @@
 <div align="center">
-    <img src="/.github/assets/logo.svg?sanitize=true" alt="Animate Presence" width="175" />
+    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/master/.github/assets/logo.svg?sanitize=true" alt="Animate Presence" width="175" style="margin:0 auto;"/>
 </div>
-<h3 align="center">Effortless element entrance/exit animations.</h3>
+<h3 align="center" style="text-align:center;">Effortless element entrance/exit animations.</h3>
+
+<h3 align="center" style="text-align:center;color:#eee">
+  <a href="https://github.com/natemoo-re/animate-presence">
+    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/master/.github/assets/logo-github.svg?sanitize=true" alt="GitHub" height="24"/>
+  </a>
+  &nbsp;/&nbsp;
+  <a href="https://www.npmjs.com/package/animate-presence">
+    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/master/.github/assets/logo-npm.svg?sanitize=true" alt="NPM" height="24"/>
+  </a>
+  &nbsp;/&nbsp;
+  <a href="https://animate-presence.now.sh/">
+    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/master/.github/assets/learn.svg?sanitize=true" alt="Examples" height="24"/>
+  </a>
+</h3>
 
 <br />
 
