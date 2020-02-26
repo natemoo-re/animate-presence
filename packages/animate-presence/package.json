@@ -24,9 +24,6 @@
     "@stencil/core": "^1.8.8",
     "workbox-build": "4.3.1"
   },
-  "peerDependencies": {
-    "@stencil/router": "^1.0.1"
-  },
   "license": "MIT",
   "repository": {
     "type": "git",
