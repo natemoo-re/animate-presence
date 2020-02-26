@@ -1,6 +1,9 @@
 {
   "name": "root",
   "private": true,
+  "scripts": {
+    "build": "lerna run build"
+  },
   "dependencies": {},
   "devDependencies": {
     "husky": "^4.2.3",
@@ -16,9 +19,6 @@
   "prettier": {
     "trailingComma": "es5",
     "singleQuote": true
-  },
-  "scripts": {
-    "build": "lerna run build"
   },
   "repository": {
     "type": "git",
