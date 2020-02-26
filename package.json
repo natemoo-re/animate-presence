@@ -3,10 +3,12 @@
   "private": true,
   "scripts": {
     "postinstall": "lerna bootstrap",
-    "build": "lerna run build"
+    "build": "lerna run build",
+    "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
   "dependencies": {},
   "devDependencies": {
+    "conventional-changelog-cli": "^2.0.31",
     "husky": "^4.2.3",
     "lerna": "^3.20.2",
     "prettier": "^1.19.1",
