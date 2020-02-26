@@ -137,7 +137,7 @@ export class AnimatePresence {
     }
 
     node.dataset.willExit = "";
-    i !== 0 && setCustomProperties(node, { i });
+    setCustomProperties(node, { i });
 
     if (isHTMLElement(record.previousSibling)) {
       record.previousSibling.insertAdjacentElement("afterend", node);
@@ -150,7 +150,7 @@ export class AnimatePresence {
     let i = 0;
     for (const record of records.reverse()) {
       if (record.addedNodes.length === 1) {
-        this.handleEnter(record.addedNodes[0], record, records.length - i);
+        this.handleEnter(record.addedNodes[0], record, (records.length - 1) - i);
       }
       if (record.removedNodes.length === 1) {
         this.handleExit(record.removedNodes[0], record, i);
