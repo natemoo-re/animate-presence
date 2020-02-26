@@ -5,15 +5,15 @@
 
 <p align="center" style="text-align:center;color:#eee">
   <a href="https://github.com/natemoo-re/animate-presence">
-    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/chore/readme/.github/assets/logo-github.svg?sanitize=true" alt="GitHub" width="48"/>
+    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/chore/readme/.github/assets/logo-github.svg?sanitize=true" alt="GitHub" height="24"/>
   </a>
-  &nbsp;|&nbsp;
+  &nbsp;•&nbsp;
   <a href="https://www.npmjs.com/package/animate-presence">
-    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/chore/readme/.github/assets/logo-npm.svg?sanitize=true" alt="NPM" width="48"/>
+    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/chore/readme/.github/assets/logo-npm.svg?sanitize=true" alt="NPM" height="24"/>
   </a>
-  &nbsp;|&nbsp;
+  &nbsp;•&nbsp;
   <a href="https://animate-presence.now.sh/">
-    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/chore/readme/.github/assets/learn.svg?sanitize=true" alt="Examples" width="48"/>
+    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/chore/readme/.github/assets/learn.svg?sanitize=true" alt="Examples" height="24"/>
   </a>
 </p>
 
