@@ -4,7 +4,7 @@ import { matchPath, MatchResults, LocationSegments } from '../../utils/router';
 import { enterChildren, exitChildren } from '../../utils';
 
 interface Child {
-  el: HTMLStencilRouteElement;
+  el: any;
   match: MatchResults | null;
 }
 
