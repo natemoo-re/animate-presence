@@ -99,8 +99,13 @@ export class AnimatePresence {
 
   private async enterNode(el: HTMLElement, i: number = 0) {
     delete el.dataset.exit;
-    el.dataset.initial = '';
-    el.dataset.enter = '';
+    const event = new CustomEvent("animatePresenceEnter", {
+      bubbles: true,
+      detail: { i }
+    });
+    el.dispatchEvent(event);
+    el.dataset.initial = "";
+    el.dataset.enter = "";
     setCustomProperties(el, { i });
 
     await presence(el, {
@@ -123,7 +128,12 @@ export class AnimatePresence {
 
     delete el.dataset.willExit;
     setCustomProperties(el, { i });
-    el.dataset.exit = '';
+    const event = new CustomEvent("animatePresenceExit", {
+      bubbles: true,
+      detail: { i }
+    });
+    el.dispatchEvent(event);
+    el.dataset.exit = "";
 
     await presence(el, {
       afterSelf: () => {
@@ -141,7 +151,7 @@ export class AnimatePresence {
   private async handleEnter(node: Node, _record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
     if (hasData(node, "exit")) return;
-    
+
     if (hasData(node, "willExit")) {
       return this.exitNode(node, "remove", i);
     } else {
@@ -219,6 +229,20 @@ export class AnimatePresence {
    * To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent.
    */
   @Event() exitComplete: EventEmitter<void>;
+
+  /**
+   * Dispatched on a child when it enters.
+   *
+   * This event can be used as a hook to animate `event.target` with the Web Animations API.
+   */
+  @Event() animatePresenceEnter: EventEmitter<{ i: number }>;
+
+  /**
+   * Dispatched on a child when it exits.
+   *
+   * This event can be used as a hook to animate `event.target` with the Web Animations API.
+   */
+  @Event() animatePresenceExit: EventEmitter<{ i: number }>;
 
   private willExit: boolean = false;
   private didExit: boolean = false;
