@@ -20,9 +20,7 @@ const getMatch = (pathname: string, url: any, exact: boolean) => {
   });
 };
 
-const isHTMLStencilRouteElement = (
-  elm: Element
-): elm is HTMLStencilRouteElement => {
+const isHTMLStencilRouteElement = (elm: Element): elm is any => {
   return elm.tagName === 'STENCIL-ROUTE';
 };
 
