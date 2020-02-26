@@ -234,7 +234,7 @@ export class AnimatePresence {
    *
    * To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent.
    */
-  @Event() exitComplete: EventEmitter<void>;
+  @Event() animatePresenceExitComplete: EventEmitter<void>;
 
   /**
    * Dispatched on a child when it enters.
@@ -253,8 +253,8 @@ export class AnimatePresence {
   private willExit: boolean = false;
   private didExit: boolean = false;
 
-  @Listen('exitComplete')
-  protected exitCompleteHandler(event: CustomEvent) {
+  @Listen('animatePresenceExitComplete')
+  protected animatePresenceExitCompleteHandler(event: CustomEvent) {
     event.stopPropagation();
   }
 
@@ -274,7 +274,7 @@ export class AnimatePresence {
     );
     this.didExit = true;
     this.willExit = false;
-    this.exitComplete.emit();
+    this.animatePresenceExitComplete.emit();
     return Promise.resolve();
   }
 
