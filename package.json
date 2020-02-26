@@ -18,7 +18,7 @@
     "singleQuote": true
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "lerna run build"
   },
   "repository": {
     "type": "git",
