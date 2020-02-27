@@ -19,7 +19,6 @@ import {
   enterChildren,
   exitChildren,
   injectGlobalStyle,
-  AnimationDetail,
 } from '../../utils';
 
 @Component({
@@ -112,7 +111,7 @@ export class AnimatePresence {
         i,
         hold: async (cb: any) => {
           el.dataset.hold = '';
-          await cb(el);
+          await cb(el).then((r?: Animation) => r?.finished);
           delete el.dataset.hold;
         },
       },
@@ -148,7 +147,7 @@ export class AnimatePresence {
         i,
         hold: async (cb: any) => {
           el.dataset.hold = '';
-          await cb(el);
+          await cb(el).then((r?: Animation) => r?.finished);
           delete el.dataset.hold;
         },
       },

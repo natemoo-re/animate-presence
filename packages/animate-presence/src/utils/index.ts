@@ -12,7 +12,6 @@ export const presence = (
       'MutationObserver' in window
     ) {
       const mo = new MutationObserver(([record]) => {
-        console.log((record.target as HTMLElement).dataset);
         if (
           typeof (record.target as HTMLElement).dataset.hold === 'undefined'
         ) {
@@ -179,10 +178,11 @@ export const injectGlobalStyle = () => {
 export interface AnimationDetail {
   i: number;
 }
+
 export type AnimationHandler = (
   el: HTMLElement,
   detail: AnimationDetail
-) => Promise<void>;
+) => Promise<Animation | void>;
 
 export const createAnimationHandler = (cb: AnimationHandler) => ({
   detail: { hold, ...detail },
