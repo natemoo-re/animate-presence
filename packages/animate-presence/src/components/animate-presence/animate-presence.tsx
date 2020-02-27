@@ -19,6 +19,7 @@ import {
   enterChildren,
   exitChildren,
   injectGlobalStyle,
+  AnimationDetail,
 } from '../../utils';
 
 @Component({
@@ -107,7 +108,14 @@ export class AnimatePresence {
     delete el.dataset.exit;
     const event = new CustomEvent('animatePresenceEnter', {
       bubbles: true,
-      detail: { i },
+      detail: {
+        i,
+        hold: async (cb: any) => {
+          el.dataset.hold = '';
+          await cb(el);
+          delete el.dataset.hold;
+        },
+      },
     });
     el.dispatchEvent(event);
     el.style.removeProperty('animation-play-state');
@@ -136,7 +144,14 @@ export class AnimatePresence {
     setCustomProperties(el, { i });
     const event = new CustomEvent('animatePresenceExit', {
       bubbles: true,
-      detail: { i },
+      detail: {
+        i,
+        hold: async (cb: any) => {
+          el.dataset.hold = '';
+          await cb(el);
+          delete el.dataset.hold;
+        },
+      },
     });
     el.dispatchEvent(event);
     el.dataset.exit = '';

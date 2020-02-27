@@ -7,6 +7,25 @@ export const presence = (
 ) => {
   const { afterSelf } = hooks;
   return new Promise(async resolve => {
+    if (
+      typeof element.dataset.hold !== 'undefined' &&
+      'MutationObserver' in window
+    ) {
+      const mo = new MutationObserver(([record]) => {
+        console.log((record.target as HTMLElement).dataset);
+        if (
+          typeof (record.target as HTMLElement).dataset.hold === 'undefined'
+        ) {
+          afterSelf?.();
+          resolve();
+        }
+      });
+      mo.observe(element, {
+        attributeFilter: ['data-hold'],
+        attributes: true,
+      });
+      return;
+    }
     // If WAAPI getAnimations exists, use that
     if (typeof element.getAnimations !== 'undefined') {
       Promise.all(element.getAnimations().map(anim => anim.finished)).then(
@@ -156,3 +175,15 @@ export const injectGlobalStyle = () => {
   ss.textContent = `animate-presence>[data-enter][style*="--i:"],animate-presence>[data-exit][style*="--i:"]{animation-fill-mode:both;}`;
   document.head.appendChild(ss);
 };
+
+export interface AnimationDetail {
+  i: number;
+}
+export type AnimationHandler = (
+  el: HTMLElement,
+  detail: AnimationDetail
+) => Promise<void>;
+
+export const createAnimationHandler = (cb: AnimationHandler) => ({
+  detail: { hold, ...detail },
+}) => hold((el: HTMLElement) => cb(el, detail as AnimationDetail));
