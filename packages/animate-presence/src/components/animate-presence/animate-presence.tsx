@@ -21,6 +21,17 @@ import {
   injectGlobalStyle,
 } from '../../utils';
 
+const hold = (el: HTMLElement) => async (cb: any) => {
+  el.dataset.hold = '';
+  await cb(el).then((r?: Animation) => {
+    if (r && 'finished' in r) {
+      return r.finished;
+    }
+    return;
+  });
+  delete el.dataset.hold;
+};
+
 @Component({
   tag: 'animate-presence',
   shadow: true,
@@ -109,11 +120,7 @@ export class AnimatePresence {
       bubbles: true,
       detail: {
         i,
-        hold: async (cb: any) => {
-          el.dataset.hold = '';
-          await cb(el).then((r?: Animation) => r?.finished);
-          delete el.dataset.hold;
-        },
+        hold: hold(el),
       },
     });
     el.dispatchEvent(event);
@@ -145,11 +152,7 @@ export class AnimatePresence {
       bubbles: true,
       detail: {
         i,
-        hold: async (cb: any) => {
-          el.dataset.hold = '';
-          await cb(el).then((r?: Animation) => r?.finished);
-          delete el.dataset.hold;
-        },
+        hold: hold(el),
       },
     });
     el.dispatchEvent(event);
