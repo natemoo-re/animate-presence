@@ -1,3 +1,5 @@
+export * from './presence-handler';
+
 export const nextTick = /*@__PURE__*/ (cb: () => void) =>
   Promise.resolve().then(cb);
 
@@ -174,16 +176,3 @@ export const injectGlobalStyle = () => {
   ss.textContent = `animate-presence>[data-enter][style*="--i:"],animate-presence>[data-exit][style*="--i:"]{animation-fill-mode:both;}`;
   document.head.appendChild(ss);
 };
-
-export interface AnimationDetail {
-  i: number;
-}
-
-export type AnimationHandler = (
-  el: HTMLElement,
-  detail: AnimationDetail
-) => Promise<Animation | void>;
-
-export const createAnimationHandler = (cb: AnimationHandler) => ({
-  detail: { hold, ...detail },
-}) => hold((el: HTMLElement) => cb(el, detail as AnimationDetail));

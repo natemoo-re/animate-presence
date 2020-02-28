@@ -25,14 +25,14 @@
     <animate-presence></animate-presence>
 
     <script type="module">
-      import { createAnimationHandler } from '/lib/build/index.esm.js';
+      import { createPresenceHandler } from '/lib/build/index.esm.js';
 
       let count = 0;
       const container = document.querySelector('animate-presence');
       const add = document.getElementById('add');
       const remove = document.getElementById('remove');
 
-      const onEnter = createAnimationHandler(async (el, { i }) => {
+      const onEnter = createPresenceHandler(async (el, { i }) => {
         return el.animate(
           [
             { opacity: 0, transform: 'translateY(100%) scale(1.05)' },
@@ -47,7 +47,7 @@
         );
       });
 
-      const onExit = createAnimationHandler(async (el, { i }) => {
+      const onExit = createPresenceHandler(async (el, { i }) => {
         return el.animate(
           [
             { opacity: 1, transform: 'translateX(0)' },

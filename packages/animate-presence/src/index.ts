@@ -1,2 +1,2 @@
 export { Components } from './components';
-export { createAnimationHandler } from './utils';
+export * from './utils/presence-handler';

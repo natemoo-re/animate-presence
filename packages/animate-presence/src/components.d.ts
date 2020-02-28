@@ -64,11 +64,11 @@ declare namespace LocalJSX {
      */
     observe?: boolean;
     /**
-     * Dispatched on a child when it enters. `event.target` is the entering child element.  It is recommended to use an animation handler created with `createAnimationHandler` for this event.
+     * Dispatched on a child when it enters. `event.target` is the entering child element.  It is recommended to use an animation handler created with `createPresenceHandler` for this event.
      */
     onAnimatePresenceEnter?: (event: CustomEvent<{ i: number }>) => void;
     /**
-     * Dispatched on a child when it exits. `event.target` is the exiting child element.  It is recommended to use an animation handler created with `createAnimationHandler` for this event.
+     * Dispatched on a child when it exits. `event.target` is the exiting child element.  It is recommended to use an animation handler created with `createPresenceHandler` for this event.
      */
     onAnimatePresenceExit?: (event: CustomEvent<{ i: number }>) => void;
     /**
