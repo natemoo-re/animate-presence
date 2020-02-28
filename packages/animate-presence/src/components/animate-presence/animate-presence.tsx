@@ -251,16 +251,16 @@ export class AnimatePresence {
   @Event() animatePresenceExitComplete: EventEmitter<void>;
 
   /**
-   * Dispatched on a child when it enters.
+   * Dispatched on a child when it enters. `event.target` is the entering child element.
    *
-   * This event can be used as a hook to animate `event.target` with the Web Animations API.
+   * It is recommended to use an animation handler created with `createAnimationHandler` for this event.
    */
   @Event() animatePresenceEnter: EventEmitter<{ i: number }>;
 
   /**
-   * Dispatched on a child when it exits.
+   * Dispatched on a child when it exits. `event.target` is the exiting child element.
    *
-   * This event can be used as a hook to animate `event.target` with the Web Animations API.
+   * It is recommended to use an animation handler created with `createAnimationHandler` for this event.
    */
   @Event() animatePresenceExit: EventEmitter<{ i: number }>;
 
