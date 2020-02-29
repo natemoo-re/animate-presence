@@ -1,3 +1,13 @@
+## [0.2.1](https://github.com/natemoo-re/animate-presence/compare/v0.2.0...v0.2.1) (2020-02-29)
+
+### Bug Fixes
+
+- Support for polyfilled WAAPI is now fixed ([3ea4ef4](https://github.com/natemoo-re/animate-presence/commit/3ea4ef4b99886dc45abfe3969df23e82f4ee2895))
+
+### Features
+
+- add `createPresenceHandler` to allow fine-grained imperative animation control ([45adcb9](https://github.com/natemoo-re/animate-presence/commit/45adcb9d0e710740cb8b39d7c2747976773cf526))
+
 # [0.2.0](https://github.com/natemoo-re/animate-presence/compare/v0.1.1...v0.2.0) (2020-02-26)
 
 ### Bug Fixes
