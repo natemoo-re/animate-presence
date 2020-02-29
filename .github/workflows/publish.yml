@@ -14,7 +14,8 @@ jobs:
       - run: npm install
       - run: npm run build -- --scope="animate-presence"
       - uses: primer/publish@master
+        with:
+          args: '--dir="packages/animate-presence"'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}
-          args: '--dir="./packages/animate-presence"'
