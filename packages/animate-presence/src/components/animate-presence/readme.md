@@ -10,11 +10,11 @@
 
 ## Events
 
-| Event                  | Description                                                                                                                                                             | Type                          |
-| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `animatePresenceEnter` | Dispatched on a child when it enters. This event can be used as a hook to animate `event.target` with the Web Animations API.                                           | `CustomEvent<{ i: number; }>` |
-| `animatePresenceExit`  | Dispatched on a child when it exits. This event can be used as a hook to animate `event.target` with the Web Animations API.                                            | `CustomEvent<{ i: number; }>` |
-| `exitComplete`         | Fires when all exiting nodes have completed animating out. To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent. | `CustomEvent<void>`           |
+| Event                         | Description                                                                                                                                                                            | Type                          |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `animatePresenceEnter`        | Dispatched on a child when it enters. `event.target` is the entering child element. It is recommended to use an animation handler created with `createPresenceHandler` for this event. | `CustomEvent<{ i: number; }>` |
+| `animatePresenceExit`         | Dispatched on a child when it exits. `event.target` is the exiting child element. It is recommended to use an animation handler created with `createPresenceHandler` for this event.   | `CustomEvent<{ i: number; }>` |
+| `animatePresenceExitComplete` | Fires when all exiting nodes have completed animating out. To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent.                | `CustomEvent<void>`           |
 
 ## Methods
 

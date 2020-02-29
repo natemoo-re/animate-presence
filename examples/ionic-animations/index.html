@@ -49,41 +49,43 @@
 
     <script type="module">
       import { createAnimation } from 'https://cdn.jsdelivr.net/npm/@ionic/core@5.0.3/dist/esm/index.mjs';
+      import { createPresenceHandler } from '/lib/build/index.esm.js';
 
       let count = 0;
       const container = document.querySelector('animate-presence');
       const add = document.getElementById('add');
       const remove = document.getElementById('remove');
 
-      // Handle enter with the Web Animations API
-      container.addEventListener('animatePresenceEnter', event => {
+      const handleEnter = createPresenceHandler(async (el, { i }) => {
         const a = createAnimation()
           .addElement(event.target)
           .duration(120)
-          .delay(event.detail.i * 30)
+          .delay(i * 30)
           .easing('ease-out')
           .fill('both')
           .keyframes([
             { opacity: 0, transform: 'translateX(32px)' },
             { opacity: 1, transform: 'translateX(0)' },
           ]);
-        a.play();
+        await a.play();
       });
 
-      // Handle exit with the Web Animations API
-      container.addEventListener('animatePresenceExit', event => {
+      const handleExit = createPresenceHandler(async (el, { i }) => {
         const a = createAnimation()
           .addElement(event.target)
           .duration(250)
-          .delay(event.detail.i * 30)
+          .delay(i * 30)
           .easing('ease-out')
-          .fill('forwards')
+          .fill('both')
           .keyframes([
             { opacity: 1, transform: 'translateY(0)' },
             { opacity: 0, transform: 'translateY(64px)' },
           ]);
-        a.play();
+        await a.play();
       });
+
+      container.addEventListener('animatePresenceEnter', handleEnter);
+      container.addEventListener('animatePresenceExit', handleExit);
 
       add.addEventListener('click', () => {
         const nodes = Array.from({ length: randBetween(2, 4) }, (_, i) => {

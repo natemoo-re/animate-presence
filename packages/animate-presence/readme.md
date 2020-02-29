@@ -1,9 +1,9 @@
 <div align="center">
-    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/master/.github/assets/logo.svg?sanitize=true" alt="Animate Presence" width="175" style="margin:0 auto;"/>
+    <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/master/.github/assets/logo.svg?sanitize=true" alt="Animate Presence" height="175" width="175"/>
 </div>
-<h3 align="center" style="text-align:center;">Effortless element entrance/exit animations.</h3>
+<h3 align="center">Effortless element entrance/exit animations.</h3>
 
-<h3 align="center" style="text-align:center;color:#eee">
+<h3 align="center">
   <a href="https://github.com/natemoo-re/animate-presence">
     <img src="https://raw.githubusercontent.com/natemoo-re/animate-presence/master/.github/assets/logo-github.svg?sanitize=true" alt="GitHub" height="24"/>
   </a>
@@ -23,7 +23,7 @@
 
 Unlike most animation libraries, there's no new API to learn&mdash;just use CSS or the [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API).
 
-Here's a basic example:
+Here's a basic example using CSS. See [Declarative Animations](#declarative-animations-css).
 
 ```html
 <animate-presence>
@@ -38,6 +38,7 @@ Here's a basic example:
   }
   .item[data-exit] {
     animation: fade 1s ease-out reverse;
+    animation-fill-mode: both;
   }
   @keyframes fade {
     from {
@@ -50,13 +51,52 @@ Here's a basic example:
 </style>
 ```
 
+Here's a basic example using WAAPI. See [Imperative Animations](#imperative-animations-waapi).
+
+```jsx
+import { createPresenceHandler } from 'animate-presence';
+
+const List = () => {
+  const fade = new Animation({
+    opacity: [0, 1],
+  });
+  const handleEnter = createPresenceHandler(async el => {
+    return el.animate(fade, {
+      duration: 1000,
+      easing: 'ease-in',
+      fill: 'both',
+    });
+  });
+  const handleExit = createPresenceHandler(async el => {
+    return el.animate(fade, {
+      duration: 1000,
+      easing: 'ease-out',
+      direction: 'reverse',
+      fill: 'both',
+    });
+  });
+  return (
+    <animate-presence
+      onAnimatePresenceEnter={handleEnter}
+      onAnimatePresenceExit={handleExit}
+    >
+      <div class="item">Item A</div>
+      <div class="item">Item B</div>
+      <div class="item">Item C</div>
+    </animate-presence>
+  );
+};
+```
+
+## Declarative Animations (CSS)
+
 As child elements are added or removed, `data-enter` and `data-exit` attributes are automatically applied.
 
 Using CSS, you can use these attributes as hooks to apply an animation or transition.
 
 Once the animation finishes, `<animate-presence>` automatically cleans itself up, removing the attribute and any listeners.
 
-## Attributes
+### Attributes
 
 | Attribute    | Description                                                                                                                    |
 | ------------ | ------------------------------------------------------------------------------------------------------------------------------ |
@@ -69,7 +109,7 @@ Once the animation finishes, `<animate-presence>` automatically cleans itself up
 > If you experience visual flickering at the start or end of an animation, you may be using a selector with a higher specificity than `021`.
 > The `animation` shorthand resets the `animation-fill-mode` to `none`, so you likely need to manually specify `both`.
 
-## Stagger
+### Stagger
 
 When multiple elements enter/exit, Animate Presence automatically sets a custom property, `--i`, on each child.
 
@@ -79,6 +119,61 @@ This makes staggered animations simple with a small `calc` function.
 [data-enter] {
   animation-delay: calc(var(--i, 0) * 50ms);
 }
+```
+
+## Imperative Animations (WAAPI)
+
+Using the [Web Animations API](https://developer.mozilla.org/en-US/docs/Web/API/Web_Animations_API/Using_the_Web_Animations_API) to imperatively
+animate entrances/exits is the best way to coordinate complex, multi-step animations.
+
+> It's also possible to use your favorite animation library, like [Popmotion](https://popmotion.io/pure/) or [Anime.js](https://animejs.com/)!
+
+### Events
+
+| Event                  | Description                                                                                                                  |
+| ---------------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| `animatePresenceEnter` | Dispatched immediately when a node enters. Handle your entrance animation here.                                              |
+| `animatePresenceExit`  | Dispatched when a node will be removed. Handle your exit animations here. The node will be removed when the handler returns. |
+
+As you might expect, these events are dispatched to the children of `animate-presence` as they enter or exit.
+These events bubble, so listeners can be attached directly to an `animate-presence` element via `addEventListener` or `onAnimatePresenceEnter/Exit` handlers.
+
+### `createPresenceHandler`
+
+Use the included `createPresenceHandler` utility to create async callbacks for these events.
+
+```js
+import { createPresenceHandler } from 'animate-presence';
+
+const onExit = createPresenceHandler(async (el, { i }) => {
+  // Note that `element.animate()` doesn't return a Promise, it returns an `Animation`.
+  // In order to await the `Animation`, you want `Animation.finished`.
+  await el.animate(
+    [{ transform: 'translateY(0)' }, { transform: 'translateY(50%)' }],
+    {
+      duration: 300,
+      delay: i * 50,
+      easing: 'cubic-bezier(0.165, 0.84, 0.44, 1)',
+      fill: 'both', // Be sure to set this!
+    }
+  ).finished;
+
+  // `createPresenceHandler` can optionally `return el.animate()` instead of using `await el.animate().finished`
+  await el.animate(
+    [
+      { opacity: 1, transform: `translate(0, 50%)` },
+      { opacity: 0, transform: `translate(16px, 50%)` },
+    ],
+    {
+      duration: 300,
+      easing: 'cubic-bezier(0.165, 0.84, 0.44, 1)',
+      fill: 'both', // Be sure to set this!
+    }
+  ).finished;
+});
+
+const ap = document.querySelector('animate-presence');
+ap.addEventListener('animatePresenceExit', onExit);
 ```
 
 ## Nesting

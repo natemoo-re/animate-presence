@@ -12,10 +12,10 @@ jobs:
         with:
           node-version: '12.x'
       - run: npm install
-      - run: npm run build -- --scope="animate-presence"
-      - uses: primer/publish@master
+      - run: npm run build
+      - uses: primer/publish@v2.0.0
         with:
-          args: '--dir="packages/animate-presence"'
+          args: '--dir=packages/animate-presence'
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           NPM_AUTH_TOKEN: ${{ secrets.NPM_AUTH_TOKEN }}

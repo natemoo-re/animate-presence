@@ -1,3 +1,5 @@
+export * from './presence-handler';
+
 export const nextTick = /*@__PURE__*/ (cb: () => void) =>
   Promise.resolve().then(cb);
 
@@ -7,6 +9,24 @@ export const presence = (
 ) => {
   const { afterSelf } = hooks;
   return new Promise(async resolve => {
+    if (
+      typeof element.dataset.hold !== 'undefined' &&
+      'MutationObserver' in window
+    ) {
+      const mo = new MutationObserver(([record]) => {
+        if (
+          typeof (record.target as HTMLElement).dataset.hold === 'undefined'
+        ) {
+          afterSelf?.();
+          resolve();
+        }
+      });
+      mo.observe(element, {
+        attributeFilter: ['data-hold'],
+        attributes: true,
+      });
+      return;
+    }
     // If WAAPI getAnimations exists, use that
     if (typeof element.getAnimations !== 'undefined') {
       Promise.all(element.getAnimations().map(anim => anim.finished)).then(
