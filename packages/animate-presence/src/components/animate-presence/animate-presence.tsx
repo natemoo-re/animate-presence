@@ -21,6 +21,17 @@ import {
   injectGlobalStyle,
 } from '../../utils';
 
+const hold = (el: HTMLElement) => async (cb: any) => {
+  el.dataset.hold = '';
+  await cb(el).then((r?: Animation) => {
+    if (r && 'finished' in r) {
+      return r.finished;
+    }
+    return;
+  });
+  delete el.dataset.hold;
+};
+
 @Component({
   tag: 'animate-presence',
   shadow: true,
@@ -107,7 +118,10 @@ export class AnimatePresence {
     delete el.dataset.exit;
     const event = new CustomEvent('animatePresenceEnter', {
       bubbles: true,
-      detail: { i },
+      detail: {
+        i,
+        hold: hold(el),
+      },
     });
     el.dispatchEvent(event);
     el.style.removeProperty('animation-play-state');
@@ -136,7 +150,10 @@ export class AnimatePresence {
     setCustomProperties(el, { i });
     const event = new CustomEvent('animatePresenceExit', {
       bubbles: true,
-      detail: { i },
+      detail: {
+        i,
+        hold: hold(el),
+      },
     });
     el.dispatchEvent(event);
     el.dataset.exit = '';
@@ -237,16 +254,16 @@ export class AnimatePresence {
   @Event() animatePresenceExitComplete: EventEmitter<void>;
 
   /**
-   * Dispatched on a child when it enters.
+   * Dispatched on a child when it enters. `event.target` is the entering child element.
    *
-   * This event can be used as a hook to animate `event.target` with the Web Animations API.
+   * It is recommended to use an animation handler created with `createPresenceHandler` for this event.
    */
   @Event() animatePresenceEnter: EventEmitter<{ i: number }>;
 
   /**
-   * Dispatched on a child when it exits.
+   * Dispatched on a child when it exits. `event.target` is the exiting child element.
    *
-   * This event can be used as a hook to animate `event.target` with the Web Animations API.
+   * It is recommended to use an animation handler created with `createPresenceHandler` for this event.
    */
   @Event() animatePresenceExit: EventEmitter<{ i: number }>;
 
