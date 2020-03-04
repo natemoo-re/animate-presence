@@ -6,3 +6,4 @@ examples/lib
 .stencil
 .cache
 .DS_Store
+.now

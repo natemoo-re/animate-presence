@@ -24,6 +24,12 @@ export namespace Components {
      * If `true` (default), a MutationObserver will automatically be connected to enable animations when a child node enters/exits.  If you know the children are static (typical `animated-route-switch` use case), `false` may improve performance.  Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value,  which means MutationObservers can be disabled for the entire tree by setting `observe={false}` on the top-level element.  However, directly set values always take precedence over inherited values.
      */
     observe: boolean;
+    /**
+     * Changes the behavior of nested `<animate-presence>` elements.  `sequential` (default) will enter from the top-down and exit from the bottom-up.  `parallel` will trigger all entrances and exits in parallel  Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value,
+     */
+    orchestrate: 'sequential' | 'parallel';
+    orchestrateEnter: 'sequential' | 'parallel';
+    orchestrateExit: 'sequential' | 'parallel';
     registerChild: (el: HTMLAnimatePresenceElement) => Promise<void>;
     unregisterChild: (key: string) => Promise<void>;
   }
@@ -75,6 +81,12 @@ declare namespace LocalJSX {
      * Fires when all exiting nodes have completed animating out.  To simplify listener behavior, this event bubbles, but never beyond the closest `<animate-presence>` parent.
      */
     onAnimatePresenceExitComplete?: (event: CustomEvent<void>) => void;
+    /**
+     * Changes the behavior of nested `<animate-presence>` elements.  `sequential` (default) will enter from the top-down and exit from the bottom-up.  `parallel` will trigger all entrances and exits in parallel  Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value,
+     */
+    orchestrate?: 'sequential' | 'parallel';
+    orchestrateEnter?: 'sequential' | 'parallel';
+    orchestrateExit?: 'sequential' | 'parallel';
   }
   interface AnimatedRouteSwitch {
     location?: LocationSegments;
