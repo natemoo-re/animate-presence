@@ -60,6 +60,19 @@ export class AnimatePresence {
    */
   @Prop({ mutable: true }) observe: boolean;
 
+  /**
+   * Changes the behavior of nested `<animate-presence>` elements.
+   *
+   * `sequential` (default) will enter from the top-down and exit from the bottom-up.
+   *
+   * `parallel` will trigger all entrances and exits in parallel
+   *
+   * Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value,
+   */
+  @Prop() orchestrate: 'sequential' | 'parallel';
+  @Prop() orchestrateEnter: 'sequential' | 'parallel';
+  @Prop() orchestrateExit: 'sequential' | 'parallel';
+
   @Watch('observe')
   observeChanged() {
     if (this.observe) {
@@ -92,6 +105,16 @@ export class AnimatePresence {
     this.ancestor = this.getClosestParent();
     if (typeof this.observe === 'undefined') {
       this.observe = this.ancestor?.observe ?? true;
+    }
+    if (typeof this.orchestrate === 'undefined') {
+      this.orchestrate = this.ancestor?.orchestrate ?? 'sequential';
+    }
+    if (typeof this.orchestrateEnter === 'undefined') {
+      this.orchestrateEnter =
+        this.ancestor?.orchestrateEnter ?? this.orchestrate;
+    }
+    if (typeof this.orchestrateExit === 'undefined') {
+      this.orchestrateExit = this.ancestor?.orchestrateExit ?? this.orchestrate;
     }
     Array.from(this.element.children).map((el: HTMLElement, i) => {
       setCustomProperties(el, { i });
@@ -128,15 +151,23 @@ export class AnimatePresence {
     el.dataset.enter = '';
     setCustomProperties(el, { i });
 
-    await presence(el, {
-      afterSelf: async () => {
-        delete el.dataset.initial;
-        delete el.dataset.enter;
-        el.style.removeProperty('--i');
-      },
-    });
+    const enter = () =>
+      presence(el, {
+        afterSelf: async () => {
+          delete el.dataset.initial;
+          delete el.dataset.enter;
+          el.style.removeProperty('--i');
+        },
+      });
 
-    return enterChildren(el);
+    if (this.orchestrateEnter === 'sequential') {
+      await enter();
+      await enterChildren(el);
+    } else if (this.orchestrateEnter === 'parallel') {
+      await Promise.all([enter(), enterChildren(el)]);
+    }
+
+    return Promise.resolve();
   }
 
   private async exitNode(
@@ -144,30 +175,36 @@ export class AnimatePresence {
     method: 'remove' | 'hide' = 'remove',
     i: number = 0
   ) {
-    await exitChildren(el);
+    const exit = () => {
+      delete el.dataset.willExit;
+      setCustomProperties(el, { i });
+      const event = new CustomEvent('animatePresenceExit', {
+        bubbles: true,
+        detail: {
+          i,
+          hold: hold(el),
+        },
+      });
+      el.dispatchEvent(event);
+      el.dataset.exit = '';
 
-    delete el.dataset.willExit;
-    setCustomProperties(el, { i });
-    const event = new CustomEvent('animatePresenceExit', {
-      bubbles: true,
-      detail: {
-        i,
-        hold: hold(el),
-      },
-    });
-    el.dispatchEvent(event);
-    el.dataset.exit = '';
+      return presence(el, {
+        afterSelf: () => {
+          if (method === 'remove') {
+            el.remove();
+          } else if (method === 'hide') {
+            el.style.setProperty('visibility', 'hidden');
+          }
+        },
+      });
+    };
 
-    await presence(el, {
-      afterSelf: () => {
-        if (method === 'remove') {
-          el.remove();
-        } else if (method === 'hide') {
-          el.style.setProperty('visibility', 'hidden');
-        }
-      },
-    });
-
+    if (this.orchestrateExit === 'sequential') {
+      await exitChildren(el);
+      await exit();
+    } else if (this.orchestrateExit === 'parallel') {
+      await Promise.all([exitChildren(el), exit()]);
+    }
     return Promise.resolve();
   }
 

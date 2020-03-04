@@ -29,13 +29,13 @@ export const presence = (
     }
     // If WAAPI getAnimations exists, use that
     if (typeof element.getAnimations !== 'undefined') {
-      Promise.all(element.getAnimations().map(anim => anim.finished)).then(
-        () => {
+      Promise.all(element.getAnimations().map(anim => anim.finished))
+        .then(() => {
           afterSelf?.();
           resolve();
           return;
-        }
-      );
+        })
+        .catch(() => {});
     } else {
       // Otherwise grab the computed style to check what listeners to attach
       // or bail out if there aren't any animations/transitions set
