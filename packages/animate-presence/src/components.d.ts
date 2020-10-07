@@ -20,6 +20,7 @@ export namespace Components {
      * Programmatically triggers an exit.  Nested `<animate-presence>` children will be animated out from the bottom up, meaning that children elements trigger a parent's exit after their own exit finishes.
      */
     exit: () => Promise<void>;
+    flip: boolean;
     /**
      * If `true` (default), a MutationObserver will automatically be connected to enable animations when a child node enters/exits.  If you know the children are static (typical `animated-route-switch` use case), `false` may improve performance.  Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value,  which means MutationObservers can be disabled for the entire tree by setting `observe={false}` on the top-level element.  However, directly set values always take precedence over inherited values.
      */
@@ -59,6 +60,7 @@ declare global {
 
 declare namespace LocalJSX {
   interface AnimatePresence {
+    flip?: boolean;
     /**
      * If `true` (default), a MutationObserver will automatically be connected to enable animations when a child node enters/exits.  If you know the children are static (typical `animated-route-switch` use case), `false` may improve performance.  Note: `<animate-presence>` elements which are children of a parent `<animate-presence>` element will inherit this value,  which means MutationObservers can be disabled for the entire tree by setting `observe={false}` on the top-level element.  However, directly set values always take precedence over inherited values.
      */

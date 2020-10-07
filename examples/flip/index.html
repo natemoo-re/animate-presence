@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html dir="ltr" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>Animate Presence | Flip</title>
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=5.0"
+    />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta http-equiv="x-ua-compatible" content="IE=Edge" />
+
+    <link rel="stylesheet" href="../shared/list.css" />
+    <style>
+      .container {
+        position: relative;
+        height: calc(100vh - 400px);
+      }
+
+      .target {
+        position: absolute;
+        --size: 64px;
+        --tx: calc((var(--x, 0) * 1px));
+        --ty: calc((var(--y, 0) * 1px));
+        top: var(--ty);
+        left: var(--tx);
+
+        width: calc(var(--size) * var(--scale, 1));
+        height: calc(var(--size) * var(--scale, 1));
+      }
+
+      .box {
+        --size: 64px;
+        background: red;
+      }
+
+      /* .round {
+        border-radius: 32px;
+      } */
+
+      .full {
+        width: 100%;
+        height: 256px;
+        margin-top: 100px;
+        background: blue;
+      }
+
+      [data-flip] {
+        transition: transform 5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      }
+    </style>
+
+    <!-- Import animate-presence web component -->
+    <script type="module" src="/lib/build/animate-presence.esm.js"></script>
+    <script nomodule="" src="/lib/build/animate-presence.js"></script>
+  </head>
+
+  <body>
+    <script type="module">
+      import {
+        html,
+        Component,
+        render,
+        useState,
+        useRef,
+      } from 'https://unpkg.com/htm/preact/standalone.module.js';
+
+      let initialState = { x: 0, y: 0, scale: 1 };
+
+      function App(initialState) {
+        const stack = useRef([initialState]);
+        const [i, setI] = useState(0);
+        const container = useRef(null);
+
+        function forward() {
+          if (i < stack.current.length - 1) {
+            setI(v => v + 1);
+          } else {
+            const x = Math.floor(
+              (container.current.clientWidth - 128) * Math.random()
+            );
+            const y = Math.floor(
+              (container.current.clientHeight - 128 - 50) * Math.random()
+            );
+            const scale = (0.25 + Math.random() * 2).toFixed(2);
+            stack.current = [...stack.current, { x, y, scale }];
+            setI(v => v + 1);
+          }
+        }
+
+        function back() {
+          setI(v => (v === 0 ? 0 : v - 1));
+        }
+
+        const { x, y, scale } = stack.current[i];
+        const even = i % 2 === 0;
+        const color = i % 2 !== 0 ? 'blue' : 'red';
+
+        return html`
+          <div class="app">
+            <div class="buttons">
+              <button onClick=${back}>-</button>
+              <button onClick=${forward}>+</button>
+            </div>
+
+            <div ref=${container} class="container">
+              <animate-presence __unstable-flip>
+                <div
+                  class="target box ${even ? 'round' : ''}"
+                  data-key="box-0"
+                  style="--x: ${x}; --y: ${y}; --scale: ${scale}; background: ${color};"
+                ></div>
+              </animate-presence>
+            </div>
+          </div>
+        `;
+      }
+
+      render(
+        html`
+          <${App} ...${initialState} />
+        `,
+        document.body
+      );
+    </script>
+  </body>
+</html>

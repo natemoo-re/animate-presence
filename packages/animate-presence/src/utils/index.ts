@@ -1,13 +1,19 @@
 export * from './presence-handler';
+export * from './flip';
 
 export const nextTick = /*@__PURE__*/ (cb: () => void) =>
   Promise.resolve().then(cb);
 
 export const presence = (
   element: HTMLElement,
-  hooks: { afterSelf?: () => void } = {}
+  hooks: {
+    init?: () => void;
+    afterSelf?: () => void;
+    onCancel?: () => void;
+  } = {}
 ) => {
-  const { afterSelf } = hooks;
+  const { init, afterSelf, onCancel } = hooks;
+  init?.();
   return new Promise(async resolve => {
     if (
       typeof element.dataset.hold !== 'undefined' &&
@@ -29,13 +35,17 @@ export const presence = (
     }
     // If WAAPI getAnimations exists, use that
     if (typeof element.getAnimations !== 'undefined') {
-      Promise.all(element.getAnimations().map(anim => anim.finished)).then(
-        () => {
+      Promise.all(element.getAnimations().map(anim => anim.finished))
+        .then(() => {
           afterSelf?.();
           resolve();
           return;
-        }
-      );
+        })
+        .catch(() => {
+          onCancel?.();
+          resolve();
+          return;
+        });
     } else {
       // Otherwise grab the computed style to check what listeners to attach
       // or bail out if there aren't any animations/transitions set
@@ -71,7 +81,8 @@ export const presence = (
   });
 };
 
-const kebab = (str: string) => str.replace(/([A-Z])/g, `-$1`).toLowerCase();
+export const kebab = (str: string) =>
+  str.replace(/([A-Z])/g, `-$1`).toLowerCase();
 
 type Primitive = string | number | boolean | null | undefined;
 
@@ -122,9 +133,7 @@ const convertToCustomProperties = (
 };
 
 export const isHTMLElement = (node: Node): node is HTMLElement =>
-  node &&
-  node.nodeType === node.ELEMENT_NODE &&
-  typeof (node as HTMLElement).tagName !== 'undefined';
+  node && node instanceof HTMLElement;
 
 export const hasData = (el: HTMLElement, key: string) =>
   typeof el.dataset[key] !== 'undefined';

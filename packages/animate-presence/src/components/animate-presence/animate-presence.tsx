@@ -19,6 +19,8 @@ import {
   enterChildren,
   exitChildren,
   injectGlobalStyle,
+  getBounds,
+  getDelta,
 } from '../../utils';
 
 const hold = (el: HTMLElement) => async (cb: any) => {
@@ -46,6 +48,9 @@ export class AnimatePresence {
   @Prop() descendants: HTMLAnimatePresenceElement[] = [];
 
   private ancestor: HTMLAnimatePresenceElement;
+  private flipCache = new Map();
+
+  @Prop({ attribute: '__unstable-flip' }) flip: boolean = false;
 
   /**
    * If `true` (default), a MutationObserver will automatically be connected to enable animations when a child node enters/exits.
@@ -65,9 +70,11 @@ export class AnimatePresence {
     if (this.observe) {
       this.addMO();
       this.mo.observe(this.element, {
+        subtree: this.flip,
         childList: true,
         attributes: true,
-        attributeFilter: ['data-key'],
+        attributeOldValue: this.flip,
+        attributeFilter: this.flip ? ['data-key', 'class', 'style'] : undefined,
       });
     } else {
       this.removeMO();
@@ -94,9 +101,13 @@ export class AnimatePresence {
       this.observe = this.ancestor?.observe ?? true;
     }
     Array.from(this.element.children).map((el: HTMLElement, i) => {
-      setCustomProperties(el, { i });
-      el.style.setProperty('animation-play-state', 'paused');
-      (el as HTMLElement).dataset.enter = '';
+      if (hasData(el, 'key')) {
+        this.flipCache.set(el.dataset.key, getBounds(el));
+      } else {
+        setCustomProperties(el, { i });
+        el.style.setProperty('animation-play-state', 'paused');
+        (el as HTMLElement).dataset.enter = '';
+      }
     });
   }
 
@@ -115,6 +126,10 @@ export class AnimatePresence {
   }
 
   private async enterNode(el: HTMLElement, i: number = 0) {
+    if (hasData(el, 'key')) {
+      return this.handleFlip(el);
+    }
+
     delete el.dataset.exit;
     const event = new CustomEvent('animatePresenceEnter', {
       bubbles: true,
@@ -130,7 +145,6 @@ export class AnimatePresence {
 
     await presence(el, {
       afterSelf: async () => {
-        delete el.dataset.initial;
         delete el.dataset.enter;
         el.style.removeProperty('--i');
       },
@@ -144,6 +158,19 @@ export class AnimatePresence {
     method: 'remove' | 'hide' = 'remove',
     i: number = 0
   ) {
+    const handleEnd = () => {
+      if (method === 'remove') {
+        el.remove();
+      } else if (method === 'hide') {
+        el.style.setProperty('visibility', 'hidden');
+      }
+    };
+    if (hasData(el, 'key')) {
+      this.flipCache.set(el.dataset.key, getBounds(el));
+      handleEnd();
+      return Promise.resolve();
+    }
+
     await exitChildren(el);
 
     delete el.dataset.willExit;
@@ -159,17 +186,43 @@ export class AnimatePresence {
     el.dataset.exit = '';
 
     await presence(el, {
-      afterSelf: () => {
-        if (method === 'remove') {
-          el.remove();
-        } else if (method === 'hide') {
-          el.style.setProperty('visibility', 'hidden');
-        }
-      },
+      afterSelf: handleEnd,
     });
 
     return Promise.resolve();
   }
+
+  // private async flipNode(el: HTMLElement) {
+  //   if (hasData(el, 'flip')) return;
+  //   const prev = this.flipCache.get(el.dataset.key);
+  //   const curr = getStyle(el);
+  //   const initialStyle = el.getAttribute('style');
+
+  //   const diff = diffStyles(curr, prev);
+
+  //   if (Object.keys(diff).length > 0) {
+  //     for (const [key, { previous }] of Object.entries(diff)) {
+  //       el.style.setProperty(key, `${previous}`);
+  //     }
+  //     await Promise.resolve();
+  //     el.dataset.flip = '';
+  //     await presence(el, {
+  //       init: () => {
+  //         el.setAttribute('style', initialStyle);
+  //       },
+  //       afterSelf: () => {
+  //         delete el.dataset.flip;
+  //         this.flipCache.set(el.dataset.key, curr);
+  //       },
+  //       onCancel: () => {
+  //         this.flipCache.set(el.dataset.key, {});
+  //         delete el.dataset.flip;
+  //       },
+  //     });
+  //   } else {
+  //     this.flipCache.set(el.dataset.key, curr);
+  //   }
+  // }
 
   private async handleEnter(node: Node, _record: MutationRecord, i?: number) {
     if (!isHTMLElement(node)) return;
@@ -198,6 +251,54 @@ export class AnimatePresence {
     }
   }
 
+  private async handleFlip(node: Node) {
+    if (!isHTMLElement(node)) return;
+    if (!hasData(node, 'key')) return;
+
+    const key = node.dataset.key;
+    if (hasData(node, 'flip')) return;
+
+    const prev = this.flipCache.get(key);
+    const curr = getBounds(node);
+
+    if (prev.width === 0 && prev.height === 0) {
+      this.flipCache.set(key, curr);
+      return;
+    }
+
+    if (!hasData(node, 'willFlip')) {
+      const delta = getDelta(prev, curr);
+      console.log(delta);
+
+      node.dataset.willFlip = '';
+      node.style.setProperty(
+        'transform',
+        `translate(${delta.left}px, ${delta.top}px) scale(${delta.width}, ${delta.height})`
+      );
+      await new Promise(resolve =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      );
+      node.dataset.flip = '';
+      await new Promise(resolve =>
+        requestAnimationFrame(() => requestAnimationFrame(resolve))
+      );
+
+      await presence(node, {
+        init: () => {
+          node.style.removeProperty('transform');
+          delete node.dataset.willFlip;
+        },
+        afterSelf: async () => {
+          this.flipCache.set(key, curr);
+          delete node.dataset.flip;
+        },
+        onCancel() {
+          node.dataset.flip = 'continue';
+        },
+      });
+    }
+  }
+
   private handleMutation(records: MutationRecord[]) {
     let i = 0;
     for (const record of records.reverse()) {
@@ -206,6 +307,15 @@ export class AnimatePresence {
       }
       if (record.removedNodes.length === 1) {
         this.handleExit(record.removedNodes[0], record, i);
+      }
+
+      if (
+        record.type === 'attributes' &&
+        record.attributeName &&
+        ['class', 'style'].includes(record.attributeName)
+      ) {
+        const el = record.target;
+        if (isHTMLElement(el)) this.handleFlip(el);
       }
       i++;
     }
