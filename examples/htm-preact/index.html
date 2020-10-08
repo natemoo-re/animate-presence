@@ -10,7 +10,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta http-equiv="x-ua-compatible" content="IE=Edge" />
 
-    <link rel="stylesheet" href="../shared/list.css" />
+    <link rel="stylesheet" href="../shared/index.css" />
 
     <!-- Import animate-presence web component -->
     <script type="module" src="/lib/build/animate-presence.esm.js"></script>
@@ -50,52 +50,7 @@
     </style>
   </head>
   <body>
-    <script type="module">
-      import {
-        html,
-        Component,
-        render,
-      } from 'https://unpkg.com/htm/preact/standalone.module.js';
-
-      class App extends Component {
-        add() {
-          const items = this.state.items || [];
-          this.setState({ items: items.concat(`Item ${items.length + 1}`) });
-        }
-
-        remove() {
-          const items = this.state.items || [];
-          this.setState({ items: items.slice(0, -1) });
-        }
-
-        render({}, { items = [] }) {
-          return html`
-            <div class="app">
-              <div class="buttons">
-                <button id="add" onClick=${this.add.bind(this)}>Add</button>
-                <button id="remove" onClick=${this.remove.bind(this)}>
-                  Remove
-                </button>
-              </div>
-
-              <animate-presence>
-                ${items.map(
-                  item => html`
-                    <div class="item">${item}</div>
-                  `
-                )}
-              </animate-presence>
-            </div>
-          `;
-        }
-      }
-
-      render(
-        html`
-          <${App} />
-        `,
-        document.body
-      );
-    </script>
+    <main></main>
+    <script type="module" src="/htm-preact/index.mjs"></script>
   </body>
 </html>
