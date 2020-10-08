@@ -10,11 +10,11 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta http-equiv="x-ua-compatible" content="IE=Edge" />
 
-    <link rel="stylesheet" href="/shared/list.css" />
+    <link rel="stylesheet" href="/shared/index.css" />
 
     <!-- Import animate-presence web component -->
     <script type="module" src="/lib/build/animate-presence.esm.js"></script>
-    <script nomodule="" src="/lib/build/animate-presence.js"></script>
+    <script nomodule src="/lib/build/animate-presence.js"></script>
 
     <!-- Setup animations for enter and exit -->
     <style>
@@ -36,34 +36,39 @@
     </style>
   </head>
   <body>
-    <animate-presence>
-      <h1>Examples</h1>
+    <main>
+      <animate-presence>
+        <h1>Examples</h1>
 
-      <h2>Intro</h2>
-      <div class="item">
-        <a href="/basic">Basic</a>
-      </div>
-      <div class="item">
-        <a href="/stagger">Stagger</a>
-      </div>
-      <div class="item">
-        <a href="/nesting">Nesting</a>
-      </div>
-      <div class="item">
-        <a href="/web-animations">Web Animations API</a>
-      </div>
-      <div class="item">
-        <a href="/ionic-animations">Ionic Animations</a>
-      </div>
+        <h2>Intro</h2>
+        <div class="item">
+          <a href="/basic">Basic</a>
+        </div>
+        <div class="item">
+          <a href="/stagger">Stagger</a>
+        </div>
+        <div class="item">
+          <a href="/nesting">Nesting</a>
+        </div>
+        <div class="item">
+          <a href="/web-animations">Web Animations API</a>
+        </div>
+        <div class="item">
+          <a href="/ionic-animations">Ionic Animations</a>
+        </div>
 
-      <h2>Libraries</h2>
-      <div class="item">
-        <a href="/htm-preact">HTM + Preact</a>
-      </div>
+        <h2>Libraries</h2>
+        <div class="item">
+          <a href="/htm-preact">HTM + Preact</a>
+        </div>
+      </animate-presence>
+    </main>
 
-      <div>
-        <a href="https://github.com/natemoo-re/animate-presence">GitHub</a>
-      </div>
-    </animate-presence>
+    <project-footer repo="animate-presence"></project-footer>
+
+    <script
+      type="module"
+      src="https://unpkg.com/@natemoore/project-footer@0.0.1/dist/project-footer/project-footer.esm.js"
+    ></script>
   </body>
 </html>

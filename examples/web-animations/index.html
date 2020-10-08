@@ -10,19 +10,21 @@
     <meta name="apple-mobile-web-app-capable" content="yes" />
     <meta http-equiv="x-ua-compatible" content="IE=Edge" />
 
-    <link rel="stylesheet" href="../shared/list.css" />
+    <link rel="stylesheet" href="../shared/index.css" />
 
     <!-- Import animate-presence web component -->
     <script type="module" src="/lib/build/animate-presence.esm.js"></script>
     <script nomodule="" src="/lib/build/animate-presence.js"></script>
   </head>
   <body>
-    <div class="buttons">
-      <button id="add">Add</button>
-      <button id="remove">Remove</button>
-    </div>
+    <main>
+      <div class="buttons">
+        <button id="add">Add</button>
+        <button id="remove">Remove</button>
+      </div>
 
-    <animate-presence></animate-presence>
+      <animate-presence></animate-presence>
+    </main>
 
     <script type="module">
       import { createPresenceHandler } from '/lib/build/index.esm.js';
