@@ -1,18 +1,31 @@
 {
-  "name": "site",
-  "private": true,
-  "version": "0.0.1",
+  "name": "nextjs-preact-demo",
+  "version": "1.0.0",
   "scripts": {
-    "build": "stencil build",
-    "start": "stencil build --dev --watch --serve",
-    "test": "stencil test --spec --e2e",
-    "test.watch": "stencil test --spec --e2e --watchAll",
-    "generate": "stencil generate"
+    "dev": "next",
+    "build": "next build && next export -o build",
+    "start": "cross-env NODE_ENV=production next start"
   },
   "devDependencies": {
-    "@stencil/core": "^1.8.8",
-    "@stencil/router": "^1.0.1",
-    "animate-presence": "^0.1.0"
+    "@prefresh/next": "^1.2.4",
+    "@react-aria/tabs": "^3.0.0-alpha.1",
+    "@types/dedent": "^0.7.0",
+    "@types/react": "^16.9.51",
+    "@types/resize-observer-browser": "^0.1.3",
+    "cross-env": "^7.0.2",
+    "typescript": "^4.0.3"
   },
-  "license": "MIT"
+  "dependencies": {
+    "@monaco-editor/react": "^3.6.3",
+    "animate-presence": "^0.2.1",
+    "dedent": "^0.7.0",
+    "next": "^9.5.3",
+    "preact": "^10.5.4",
+    "preact-render-to-string": "^5.1.10",
+    "react": "npm:@preact/compat@^0.0.3",
+    "react-dom": "npm:@preact/compat@^0.0.3",
+    "react-ssr-prepass": "npm:preact-ssr-prepass@^1.1.1",
+    "use-debounce": "^5.0.1"
+  },
+  "license": "UNLICENSE"
 }

@@ -17,80 +17,7 @@
     <script nomodule="" src="/lib/build/animate-presence.js"></script>
 
     <!-- Setup animations for enter and exit -->
-    <style>
-      .item {
-        overflow: hidden;
-        justify-content: center;
-      }
-
-      .item[data-enter] {
-        animation: enter 300ms calc(var(--i, 0) * 100ms)
-          cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
-
-      .item[data-exit] {
-        animation: exit 200ms calc(var(--i, 0) * 50ms)
-          cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
-
-      .dot[data-enter] {
-        animation: dot-enter 1s calc(var(--i, 0) * 10ms)
-          cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
-
-      .dot[data-exit] {
-        animation: dot-exit 300ms calc(var(--i, 0) * 10ms)
-          cubic-bezier(0.165, 0.84, 0.44, 1);
-      }
-
-      @keyframes enter {
-        from {
-          opacity: 0;
-          transform: translateY(100%) scale(1.05);
-        }
-        to {
-          opacity: 1;
-          transform: translateY(0) scale(1);
-        }
-      }
-
-      @keyframes exit {
-        0% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        100% {
-          opacity: 0;
-          transform: translateY(64px);
-        }
-      }
-
-      @keyframes dot-enter {
-        0% {
-          opacity: 0.25;
-          transform: scale(0.9);
-        }
-        33% {
-          opacity: 1;
-          transform: scale(1.25);
-        }
-        100% {
-          opacity: 1;
-          transform: scale(1);
-        }
-      }
-
-      @keyframes dot-exit {
-        0% {
-          opacity: 1;
-          transform: translateY(0);
-        }
-        100% {
-          opacity: 0;
-          transform: translateY(8px);
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="/nesting/index.css" />
   </head>
   <body>
     <main>
@@ -102,43 +29,6 @@
       <animate-presence></animate-presence>
     </main>
 
-    <script type="module">
-      let count = 0;
-      const container = document.querySelector('animate-presence');
-      const add = document.getElementById('add');
-      const remove = document.getElementById('remove');
-
-      add.addEventListener('click', () => {
-        const nodes = Array.from({ length: randBetween(2, 4) }, (_, i) => {
-          const div = document.createElement('div');
-          div.classList.add('item');
-          div.dataset.index = count;
-
-          const ap = document.createElement('animate-presence');
-          Array.from({ length: randBetween(1, 10) }, (_, j) => {
-            const dot = document.createElement('div');
-            dot.classList.add('dot');
-            ap.appendChild(dot);
-          });
-          div.appendChild(ap);
-
-          count++;
-          return div;
-        }).forEach(node => container.appendChild(node));
-      });
-
-      remove.addEventListener('click', () => {
-        const nodes = Array.from({ length: randBetween(2, 4) }, (_, i) => {
-          const child = document.querySelector(`[data-index="${count - 1}"]`);
-          if (child) count--;
-          return child;
-        })
-          .filter(Boolean)
-          .reverse()
-          .forEach(node => node.remove());
-      });
-
-      const randBetween = (min, max) => Math.floor(Math.random() * max) + min;
-    </script>
+    <script type="module" src="/nesting/index.js"></script>
   </body>
 </html>

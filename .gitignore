@@ -7,3 +7,6 @@ examples/lib
 .cache
 .DS_Store
 .now
+.next
+build
+.vercel
