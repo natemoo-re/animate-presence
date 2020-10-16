@@ -271,7 +271,7 @@ const Example: FC<ExampleProps> = ({ html, css, js }) => {
 
 export const getStaticProps: GetStaticProps<ExampleProps> = async req => {
   try {
-    const example = req.params!.match[0];
+    const example = req.params!.match![0];
     const path = resolve(`../../examples/${example}`);
     const names = await fs.readdir(path);
     const files = await Promise.all(
