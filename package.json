@@ -8,9 +8,6 @@
     "postversion": "npm run changelog",
     "changelog": "conventional-changelog -p angular -i CHANGELOG.md -s"
   },
-  "dependencies": {
-    "shiki": "^0.2.6"
-  },
   "devDependencies": {
     "conventional-changelog-cli": "^2.0.31",
     "husky": "^4.2.3",
