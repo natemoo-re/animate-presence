@@ -32,7 +32,7 @@ export default function Logo(props: any) {
         <path
           d="M307 115c31 32 31 84 0 115a81 81 0 01-115 0 82 82 0 010-115c32-32 83-32 115 0z"
           fill="url(#paint2_radial)"
-          style="mix-blend-mode:multiply"
+          style={{ mixBlendMode: 'multiply' }}
         />
       </g>
       <defs>
